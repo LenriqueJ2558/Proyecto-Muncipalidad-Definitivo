@@ -1,0 +1,77 @@
+.navbar-custom {
+  background: #22945f;
+  border-radius: 0px 0px 50px 50px;
+  height: 70px;
+  color: white;
+}
+
+.sidebar-custom {
+  background: #22945f;
+  border-radius: 0px 50px 50px 0px;
+  color: white;
+  margin-top: 10px;
+}
+
+.sidebar-custom nav button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-custom nav button:hover,
+.sidebar-custom nav button.active {
+  background-color: rgba(255, 255, 255, 0.185);
+}
+
+.sidebar-custom nav {
+  margin-top: 20px;
+  padding-left: 10px;
+}
+
+.sidebar-custom nav .submenu {
+  margin-top: 20px;
+  padding-left: 20px;
+}
+
+.main-content {
+  background: linear-gradient(
+      rgba(245, 245, 245, 0.89),  /* Color arriba con opacidad */
+      rgba(245, 245, 245, 0.877)   /* Color abajo con opacidad */
+    ),
+    url('../image/buo.png'); /* Ruta de tu imagen */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:auto;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.navbar-custom .logout-button {
+  background-color: #E53E3E;
+  border-radius: 20px;
+  padding: 5px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-custom .logout-button:hover {
+  background-color: #C53030;
+}
+
+.navbar-custom .logobuo{
+  width: 50px;
+}
+
+
+/**ICONO USUARIO**/
+.dash-user{
+  background-color: #ffb700;
+  align-items: center;
+  display: flex;
+  padding: 5px;
+  border-radius: 50%;
+}

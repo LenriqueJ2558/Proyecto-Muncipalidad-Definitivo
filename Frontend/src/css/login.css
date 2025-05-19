@@ -1,0 +1,164 @@
+.body1{
+  background-image: url('../image/Fondo1.png'); /* Ajusta la ruta según corresponda */
+  background-size: cover; /* Hace que la imagen cubra toda la página */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-attachment: scroll;
+}
+
+.back-white{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2%;
+}
+
+.main-content1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #1c7c54d3;
+  border-radius: 5%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.company__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.company__info .logo {
+  max-width: 150px;
+  height: auto;
+}
+
+.company__info h2 {
+  margin: 0;
+  color: #ffffff; /* Color de texto oscuro para mejor contraste */
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.company__info p {
+  margin: 0;
+  color: #666; /* Color de texto gris para el copyright */
+}
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  background: white; 
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.login_form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1c7c54; /* Color de texto oscuro */
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.login_form form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login_form form div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.login_form label {
+  margin-bottom: 0.5rem;
+  color: #333; /* Color de texto oscuro */
+  font-weight: 550;
+}
+
+.login_form input{
+  color: black;
+}
+
+.form__input {
+  padding: 0.8rem;
+  border: 1px solid #ddd; /* Borde más suave */
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #f9f9f9; /* Fondo ligeramente gris para los inputs */
+}
+
+.form__input:focus {
+  outline: none;
+  border-color: #1c7c54; /* Color azul al enfocar */
+}
+
+.enter-button{
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  padding: 0.8rem;
+  background-color: #1c7c54;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 40%;
+  transition: background-color 0.3s; /* Transición suave */
+  font-weight: 600;
+}
+
+.button:hover {
+  background-color: #155f40;
+}
+
+.error {
+  color: #d9534f; /* Rojo más suave */
+  text-align: center;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.copyright{
+  color: #b1b1b1;
+}
+
+
+/* Responsive */
+@media screen and (max-width: 640px) {
+  .main-content {
+      width: 90%;
+  }
+  .company__info {
+      display: none;
+  }
+  .login_form {
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+  }
+}
+
+@media screen and (min-width: 642px) and (max-width: 800px) {
+  .main-content {
+      width: 70%;
+  }
+}
