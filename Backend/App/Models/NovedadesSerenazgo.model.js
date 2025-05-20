@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db.config'); // Asegúrate de ajustar la ruta a tu archivo db.js
-
-
+const sequelize = require('../config/db.config');
+const Usuario = require('./usuario.model'); // importa tu modelo Usuario
 
 const NovedadesSerenazgo = sequelize.define('NovedadesSerenazgo', {
   id: {
@@ -33,13 +32,21 @@ const NovedadesSerenazgo = sequelize.define('NovedadesSerenazgo', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  usuarioId: {  // <-- nuevo campo
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
 }, {
   tableName: 'NovedadesSerenazgo',
-  timestamps: false,  // Desactiva los timestamps automáticos si no los necesitas
+  timestamps: false,
 });
+
+// Asociación con Usuario
+NovedadesSerenazgo.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+Usuario.hasMany(NovedadesSerenazgo, { foreignKey: 'usuarioId' });
 
 module.exports = NovedadesSerenazgo;
