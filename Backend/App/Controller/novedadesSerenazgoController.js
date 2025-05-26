@@ -69,3 +69,35 @@ exports.getNovedadesMobile = async (req, res) => {
       res.status(500).json({ error: 'Error al obtener la novedad' });
     }
   };
+  exports.updateNovedadById = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const novedad = await NovedadesSerenazgo.findByPk(id);
+      if (!novedad) {
+        return res.status(404).json({ error: 'Novedad no encontrada' });
+      }
+  
+      const { nombre_cliente, descripcion, latitud, longitud } = req.body;
+  
+      // Manejo de archivos nuevos si se subieron
+      const nuevaFoto = req.files?.foto?.[0]?.filename || null;
+      const nuevoVideo = req.files?.video?.[0]?.filename || null;
+  
+      // Solo actualizamos los campos enviados
+      novedad.nombre_cliente = nombre_cliente || novedad.nombre_cliente;
+      novedad.descripcion = descripcion || novedad.descripcion;
+      novedad.latitud = latitud || novedad.latitud;
+      novedad.longitud = longitud || novedad.longitud;
+  
+      if (nuevaFoto) novedad.foto = nuevaFoto;
+      if (nuevoVideo) novedad.video = nuevoVideo;
+  
+      await novedad.save();
+  
+      res.json({ message: 'Novedad actualizada correctamente', novedad });
+    } catch (error) {
+      console.error('Error al actualizar la novedad:', error);
+      res.status(500).json({ error: 'Error al actualizar la novedad' });
+    }
+  };

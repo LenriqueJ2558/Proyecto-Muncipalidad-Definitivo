@@ -27,7 +27,16 @@ const storage = multer.diskStorage({
     upload.fields([{ name: 'foto', maxCount: 1 }, { name: 'video', maxCount: 1 }]), 
     novedadesSerenazgoController.createNovedad
   );
+  //Ruta para traer todas mis novedades
   router.get('/misnovedades',authJwt.verifyToken, novedadesSerenazgoController.getNovedadesMobile);
+ // Ruta para traer una novedad por ID
   router.get('/misnovedades/:id', novedadesSerenazgoController.getNovedadById);
+  //Ruta para actulizar la novedad
+  router.put(
+    '/novedades/:id',
+    authJwt.verifyToken,
+    upload.fields([{ name: 'foto', maxCount: 1 }, { name: 'video', maxCount: 1 }]),
+    novedadesSerenazgoController.updateNovedadById
+  );
   
   module.exports = router;

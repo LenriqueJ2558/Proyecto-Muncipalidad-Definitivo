@@ -19,9 +19,10 @@ const novedadesSerenazgoRoutes = require('./App/Routers/novedadesSerenazgoRoutes
 
 const app = express();
 app.use(cors({
-    origin: '*', // Cambia esto a tu dominio frontend si es necesario
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Range'] // Permite el encabezado 'Range'
+    origin: '*', // o '*'
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
+    credentials: true
 }));
 
 function getContentType(filePath) {
@@ -85,7 +86,7 @@ function getContentType(filePath) {
     });
 });
 // Middleware CORS
-app.use(cors());
+
 
 // Middleware para parsear JSON y URL-encoded bodies
 app.use(express.json());
