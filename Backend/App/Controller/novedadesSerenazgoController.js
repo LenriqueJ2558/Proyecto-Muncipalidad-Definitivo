@@ -2,12 +2,22 @@ const NovedadesSerenazgo = require('../Models/NovedadesSerenazgo.model');
 const Usuario = require('../Models/usuario.model'); // Asegúrate de ajustar la ruta al modelo
 
 exports.createNovedad = async (req, res) => {
+  
   try {
-    const { nombre_cliente, descripcion, latitud, longitud } = req.body;
+    const {
+      nombre_cliente,
+      descripcion,
+      latitud,
+      longitud,
+      GeneraldeNovedades,
+      TipodeNovedades,
+      SubTipoNovedades,
+      Base
+    } = req.body;
+
     const foto = req.files?.foto?.[0]?.filename || null;
     const video = req.files?.video?.[0]?.filename || null;
-
-    const usuarioId = req.userId;  // <-- Usuario que crea la novedad
+    const usuarioId = req.userId;
 
     const novedad = await NovedadesSerenazgo.create({
       nombre_cliente,
@@ -16,7 +26,11 @@ exports.createNovedad = async (req, res) => {
       longitud,
       foto,
       video,
-      usuarioId  // Guardamos el id del usuario
+      usuarioId,
+      GeneraldeNovedades,
+      TipodeNovedades,
+      SubTipoNovedades,
+      Base
     });
 
     res.status(201).json(novedad);
@@ -78,17 +92,29 @@ exports.getNovedadesMobile = async (req, res) => {
         return res.status(404).json({ error: 'Novedad no encontrada' });
       }
   
-      const { nombre_cliente, descripcion, latitud, longitud } = req.body;
+      const {
+        nombre_cliente,
+        descripcion,
+        latitud,
+        longitud,
+        GeneraldeNovedades,
+        TipodeNovedades,
+        SubTipoNovedades,
+        Base
+      } = req.body;
   
-      // Manejo de archivos nuevos si se subieron
       const nuevaFoto = req.files?.foto?.[0]?.filename || null;
       const nuevoVideo = req.files?.video?.[0]?.filename || null;
   
-      // Solo actualizamos los campos enviados
+      // Actualizar solo si vienen datos nuevos
       novedad.nombre_cliente = nombre_cliente || novedad.nombre_cliente;
       novedad.descripcion = descripcion || novedad.descripcion;
       novedad.latitud = latitud || novedad.latitud;
       novedad.longitud = longitud || novedad.longitud;
+      novedad.GeneraldeNovedades = GeneraldeNovedades || novedad.GeneraldeNovedades;
+      novedad.TipodeNovedades = TipodeNovedades || novedad.TipodeNovedades;
+      novedad.SubTipoNovedades = SubTipoNovedades || novedad.SubTipoNovedades;
+      novedad.Base = Base || novedad.Base;
   
       if (nuevaFoto) novedad.foto = nuevaFoto;
       if (nuevoVideo) novedad.video = nuevoVideo;

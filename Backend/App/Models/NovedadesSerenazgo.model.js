@@ -32,9 +32,25 @@ const NovedadesSerenazgo = sequelize.define('NovedadesSerenazgo', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  usuarioId: {  // <-- nuevo campo
+  usuarioId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  GeneraldeNovedades: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  TipodeNovedades: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  SubTipoNovedades: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  Base: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   created_at: {
     type: DataTypes.DATE,
