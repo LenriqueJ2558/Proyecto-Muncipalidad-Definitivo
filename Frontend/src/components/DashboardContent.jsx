@@ -4,12 +4,31 @@ import RegistrarUsuarioForm from './RegistrarUsuarioForm';
 import DetalleUsuarioForm from './UsuarioDetalles';
 import UserListForm from './UserList';
 import ReportesEstadisticos from './ReportesEstadisticos';
-import NoPermission from './NoPermission'; 
+import NoPermission from './NoPermission';
+import SerenoNoPermission from './serenoNoPermission';
 import DatosServicioForm from './AgregarServicioForm';
 import NovedadesCamaraForm from './NovedadesCamaras';
 import InformacionEstudioForm from './AgregarInformacionEstudioForm';
 import InformacionEmpleado from './AgregarDatosFamiliaresForm';
 import ReportePersonalTable from './ReportePersonalTable';
+import MisReportesCamaras from './MisReportesCamaras';
+
+import { Carousel } from 'react-bootstrap';
+import '../css/dashContent.css';
+//IMAGENES
+import img1 from '../image/img1.png';
+import img2 from '../image/img2.png';
+import img3 from '../image/img3.png';
+import img4 from '../image/img4.png';
+import img5 from '../image/img5.png';
+import img6 from '../image/img6.png';
+import img7 from '../image/img7.png';
+import img8 from '../image/img8.png';
+import img9 from '../image/img9.png';
+import img10 from '../image/img10.png';
+import img11 from '../image/img11.png';
+import img12 from '../image/img12.png';
+import img13 from '../image/img13.png';
 
 const DashboardContent = ({ selectedContent }) => {
   const role = localStorage.getItem('TipoRol');
@@ -23,7 +42,7 @@ const DashboardContent = ({ selectedContent }) => {
           return <NoPermission />;
         }
       case 'registrar-usuario':
-        if (role === 'Administrador' ) {
+        if (role === 'Administrador') {
           return <RegistrarUsuarioForm />;
         } else {
           return <NoPermission />;
@@ -67,7 +86,11 @@ const DashboardContent = ({ selectedContent }) => {
           return <NoPermission />;
         }
       case 'reportes-asistencia':
-        return <div><h2>Reportes de Asistencia</h2></div>;
+        if (role === 'Administrador') {
+          return <ReportePersonalTable />;
+        } else {
+          return <NoPermission />;
+        }
       case 'reportes-estadisticos':
         return <ReportesEstadisticos />;
       case 'inventario':
@@ -77,17 +100,165 @@ const DashboardContent = ({ selectedContent }) => {
       case 'novedades-camaras':
         if (role === 'Administrador') {
           return <NovedadesCamaraForm />;
+
         } else {
-          return <NoPermission />;
+          return <SerenoNoPermission />;
         }
+      case 'mis-reportes-camaras':
+        return <MisReportesCamaras />;
+          
+          
       case 'novedades-serenazgo':
-        return <div><h2>Novedades de Serenazgo</h2></div>;
+        if (role === 'Administrador') {
+          return <div><h2>Novedades de Serenazgo</h2></div>; 
+
+        } else {
+          return <SerenoNoPermission />;
+        }
       case 'novedades-llamadas':
         return <div><h2>Novedades de Llamadas</h2></div>;
       case 'novedades-contribuyente':
-        return <div><h2>Novedades de Contribuyente</h2></div>;
+         if (role === 'Administrador') {
+          return <div><h2>Novedades de Serenazgo</h2></div>; 
+        } else {
+          return <SerenoNoPermission />;
+        }
       default:
-        return <h2>Bienvenido al Dashboard de Administrador</h2>;
+        return (
+          <div className="container">
+            <Carousel fade id='caruchel'>
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img1}
+                  alt="Primera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img2}
+                  alt="Segunda imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block"
+                  src={img3}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img4}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img5}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img6}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img7}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img8}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img9}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img10}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img11}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img12}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+
+              <Carousel.Item>
+                <img
+                  className="d-block w-100"
+                  src={img13}
+                  alt="Tercera imagen"
+                />
+                <Carousel.Caption>
+                </Carousel.Caption>
+              </Carousel.Item>
+            </Carousel>
+          </div>
+        );
     }
   };
 

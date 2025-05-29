@@ -1,10 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faClipboardList, faGraduationCap, faUsers, faCalendarCheck, faUser, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faClipboardList, faGraduationCap, faUsers, faCalendarCheck, faUser, faUserEdit, faListCheck, faScrewdriverWrench, faChartPie, faAddressBook, faClipboardUser, faPersonCircleExclamation, faSquarePhone, faPersonMilitaryPointing, faCamera, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Dashboard.css';
 import DashboardContent from './DashboardContent';
+import buoImage from '../image/buo.png';
+import Camaras from '../image/camaras.png';
+
+
+
+
+
+// Componente Modal
+const WelcomeModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="welcome-modal" onClick={(e) => {
+      // Cerrar el modal si se hace clic fuera del contenido
+      if (e.target.className === 'welcome-modal') onClose();
+    }}>
+      <div className="modal-content">
+        <div className="modal-description">
+          <h2 className="modal-title">¡BIENVENID@ AL SISTEMA DEL CIEM!</h2>
+          <div className="buo-image">
+            <img className='logobuo' src={buoImage || "/placeholder.svg"} alt="buo" />
+          </div>
+          <p className="modal-text">Recuerda subir las novedades del día para mantenernos todos informados y asegurar una buena gestión del servicio.</p>
+          <div className="modal-button">
+            <button className="modal-btn" onClick={onClose}>
+              Entendido
+            </button>
+          </div>
+        </div>
+        <div className="modal-img">
+          <img className='camara' src={Camaras || "/placeholder.svg"} alt="camara" />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -14,7 +50,14 @@ const Dashboard = () => {
 
   const [activeMenu, setActiveMenu] = useState('');
   const [selectedContent, setSelectedContent] = useState('');
-  const [showUserMenu, setShowUserMenu] = useState(false); // Nuevo estado para mostrar el submenú de usuario
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showModal, setShowModal] = useState(true); // Modal visible por defecto
+  const [showNovedadesCamarasSubmenu, setShowNovedadesCamarasSubmenu] = useState(false);
+
+  // Cerrar el modal
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const handleLogout = async () => {
     try {
@@ -47,13 +90,32 @@ const Dashboard = () => {
   };
 
   const handleUserMenuToggle = () => {
-    setShowUserMenu(!showUserMenu); // Alterna la visibilidad del submenú de usuario
+    setShowUserMenu(!showUserMenu);
   };
 
+  // Cerrar el modal si se hace clic fuera de él
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showModal && event.target.classList.contains('modal')) {
+        setShowModal(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showModal]);
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="content-body">
+      {/* Modal de Bienvenida */}
+      <WelcomeModal isOpen={showModal} onClose={handleCloseModal} />
+
       <nav className="navbar-custom p-4 flex justify-between items-center">
-        <div className="text-white text-xl">{role}</div>
+        <div className="text-white text-xl flex items-center">
+          <img className='logobuo' src={buoImage || "/placeholder.svg"} alt="buo" /> CIEM ({role})
+        </div>
         <div className="flex items-center space-x-4 relative">
           <div><h2>Bienvenido</h2>{fullName}</div>
           <div className="relative">
@@ -64,28 +126,28 @@ const Dashboard = () => {
               <FontAwesomeIcon icon={faUser} size="lg" />
             </button>
             {showUserMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-10">
+              <div className="absolute right-0 mt-2 w-48 rounded-md py-2 z-10" id='menuUser'>
                 <button
                   onClick={() => handleSubMenuClick('registrar-usuario')}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  className="block px-4 py-2 text-sm w-full text-left"
                 >
                   <FontAwesomeIcon icon={faUserPlus} /> Registrar Usuario
                 </button>
                 <button
                   onClick={() => handleSubMenuClick('detalles-usuario')}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  className="block px-4 py-2 text-sm w-full text-left"
                 >
                   <FontAwesomeIcon icon={faUserEdit} /> Detalles del Usuario
                 </button>
                 <button
                   onClick={() => handleSubMenuClick('lista-usuarios')}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  className="block px-4 py-2 text-sm w-full text-left"
                 >
                   <FontAwesomeIcon icon={faUsers} /> Lista de Usuarios
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  className="block px-4 py-2 text-sm w-full text-left"
                 >
                   Cerrar Sesión
                 </button>
@@ -95,7 +157,7 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      <div className="flex flex-grow">
+      <div className="flex flex-grow mt-[1%]">
         <aside className="sidebar-custom w-64 text-white flex-shrink-0">
           <nav>
             <button
@@ -147,49 +209,71 @@ const Dashboard = () => {
             {activeMenu === 'ciem' && (
               <nav>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('inventario')}>
-                  Inventario
+                  <FontAwesomeIcon icon={faListCheck} /> Inventario
                 </button>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('reparaciones')}>
-                  Reparaciones
+                  <FontAwesomeIcon icon={faScrewdriverWrench} /> Reparaciones
                 </button>
               </nav>
             )}
             {activeMenu === 'reportes' && (
               <nav>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('reportes-personal')}>
-                  Reportes del Personal
+                  <FontAwesomeIcon icon={faClipboardUser} /> Reportes del Personal
                 </button>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('reportes-asistencia')}>
-                  Reportes de Asistencia
+                  <FontAwesomeIcon icon={faAddressBook} /> Reportes de Asistencia
                 </button>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('reportes-estadisticos')}>
-                  Reportes Estadísticos
+                  <FontAwesomeIcon icon={faChartPie} /> Reportes Estadísticos
                 </button>
               </nav>
             )}
             {activeMenu === 'novedades' && (
               <nav>
-                <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('novedades-camaras')}>
-                  Novedades de Cámaras
+                <button
+                  className="w-full text-left py-1"
+                  onClick={() => setShowNovedadesCamarasSubmenu(!showNovedadesCamarasSubmenu)}
+                >
+                  <FontAwesomeIcon icon={faCamera} /> Novedades de Cámaras
                 </button>
+                {showNovedadesCamarasSubmenu && (
+                  <>
+                    <button className="w-full text-left py-1 pl-6" onClick={() => handleSubMenuClick('novedades-camaras')}>
+                      ➕ Agregar Novedad
+                    </button>
+                    <button className="w-full text-left py-1 pl-6" onClick={() => handleSubMenuClick('mis-reportes-camaras')}>
+                      📋 Mis Reportes
+                    </button>
+                  </>
+                )}
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('novedades-serenazgo')}>
-                  Novedades de Serenazgo
+                  <FontAwesomeIcon icon={faPersonMilitaryPointing} /> Novedades de Serenazgo
                 </button>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('novedades-llamadas')}>
-                  Novedades de Llamadas
+                  <FontAwesomeIcon icon={faSquarePhone} /> Novedades de Llamadas
                 </button>
                 <button className="w-full text-left py-1" onClick={() => handleSubMenuClick('novedades-contribuyente')}>
-                  Novedades de Contribuyente
+                  <FontAwesomeIcon icon={faPersonCircleExclamation} /> Novedades de Contribuyente
                 </button>
               </nav>
             )}
           </div>
         </aside>
 
-        <main className="main-content flex-grow">
+        <main className="dash-novedades">
           <DashboardContent selectedContent={selectedContent} />
         </main>
       </div>
+
+      <footer className="footer-ciem">
+        <div className="img-footer">
+          <img className='logobuo' src={buoImage || "/placeholder.svg"} alt="buo" />
+        </div>
+        <div className="copiright">
+          <p> &copy; 2025 CIEM - Centro Integrado de Emergencias y Monitoreo</p>
+        </div>
+      </footer>
     </div>
   );
 };

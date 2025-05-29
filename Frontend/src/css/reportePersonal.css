@@ -1,0 +1,7 @@
+#report-person{
+    background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}

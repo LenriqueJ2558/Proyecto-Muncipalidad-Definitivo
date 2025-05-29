@@ -5,6 +5,7 @@ import '../css/agregarPersonal.css';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import ImagePreview from './ImagePreview';
+import Swal from 'sweetalert2';
 
 const AgregarPersonalForm = () => {
   const { register, handleSubmit, setValue, formState: { errors }, reset, watch, getValues } = useForm();
@@ -65,7 +66,11 @@ const AgregarPersonalForm = () => {
   const handleUpdate = async () => {
     const dni = dniInput;
     if (!dni) {
-      alert('Por favor, ingresa un DNI para actualizar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingresa un DNI para actualizar.',
+      });
       return;
     }
 
@@ -111,7 +116,11 @@ const AgregarPersonalForm = () => {
   const handleSearch = async () => {
     const dni = dniInput;
     if (!dni) {
-      alert('Por favor, ingresa un DNI para buscar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingresa un DNI para buscar.',
+      });
       return;
     }
 
@@ -150,7 +159,7 @@ const AgregarPersonalForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="container py-5">
+    <form onSubmit={handleSubmit(onSubmit)} id='containerAddPerson' className="container py-5">
       <div className="row">
         <h2 className="text-center mb-4 form-label ">Agregar Empleado</h2>
         <FormInput
@@ -167,7 +176,7 @@ const AgregarPersonalForm = () => {
           }}
           onChange={(e) => setDniToUpdate(e.target.value)} // Capturar el DNI para búsqueda y actualización
         />
-        
+
         <ImagePreview imagePreview={imagePreview} register={register} handleFileChange={handleFileChange} />
         <FormInput id="Nombre_Empleado" label="Nombre" register={register} errors={errors} validation={{ required: 'El nombre es obligatorio' }} />
         <FormInput id="Apellido_Empleado" label="Apellido" register={register} errors={errors} validation={{ required: 'El apellido es obligatorio' }} />
@@ -222,7 +231,7 @@ const AgregarPersonalForm = () => {
             Limpiar
           </button>
         </div>
-        
+
       </div>
     </form>
   );

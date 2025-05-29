@@ -1,12 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Keania+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Moonrocks&display=swap');
+
+.content-body{           /* min-h-screen */
+  min-height: 100vh;              /* min-h-screen */
+  background-image: url(../image/cam.png);      /* bg-gray-100 en Tailwind */
+  display: flex;                  /* flex */
+  flex-direction: column; 
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .navbar-custom {
-  background: #22945f;
+  background: #22945f7c;
   border-radius: 0px 0px 50px 50px;
   height: 70px;
   color: white;
 }
 
 .sidebar-custom {
-  background: #22945f;
+  background: #22945f9a;
   border-radius: 0px 50px 50px 0px;
   color: white;
   margin-top: 10px;
@@ -75,3 +88,173 @@
   padding: 5px;
   border-radius: 50%;
 }
+
+#menuUser{
+  background: #308f63;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+#menuUser button:hover{
+  background: #ffbe0b;
+  outline: none;
+  border-color: #308f63;
+}
+
+#menuUser button:focus{
+  outline: none;
+  border-color: none;
+}
+
+/* Estilos para el Modal */
+.welcome-modal {
+  display: block;
+  position: fixed;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Cambiado de auto a hidden */
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 1000px;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: modalFadeIn 0.3s;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.modal-description{
+  width: 50%;
+}
+
+.modal-img{
+  width: 100%;
+}
+
+.modal-img img{
+  border-radius: 15px;
+  box-shadow: #333;
+}
+
+@keyframes modalFadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.modal-close {
+  color: #aaa;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+.modal-title {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  color: #2c3e50;
+  font-weight: 600;
+  text-align: center;
+  font-size: 22px;
+}
+
+.buo-image{
+  display: flex;
+  justify-content: center;
+}
+
+.buo-image img{
+  padding: 5px 0px 12px;
+  width: 35%;
+  filter: drop-shadow(0 0 8px #1c7c54d3);
+}
+
+.modal-text {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  color: #555;
+  font-weight: 550;
+}
+
+.modal-button{
+  display: flex;
+  justify-content: center;
+}
+
+.modal-btn {
+  background-color: #1f7c51;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  width: 50%;
+  font-weight: 600;
+  font-size: 19px;
+  color: #fbff10;
+}
+
+.modal-btn:hover {
+  background-color: #085f3b;
+}
+
+/*MENU*/
+.submenu{
+  margin-top: 3%;
+}
+
+/*DASH NOVEDADES*/
+.dash-novedades{
+  display: flex;
+  flex-grow: inherit;
+  margin-top: 10px;
+}
+
+
+/* Estilo para el footer */
+footer{
+  margin-top: 3%;
+  background-color: rgba(0, 0, 0, 0.637);
+  border-radius: 300px 300px 0px 0px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+footer .img-footer img{
+  filter: drop-shadow(0 0 10px #1c7c54d3);
+}
+
+footer .copiright p{
+  font-size: 30px;
+  font-weight: 400;
+  font-family: "Anton", sans-serif;
+  font-style: normal;
+}
+

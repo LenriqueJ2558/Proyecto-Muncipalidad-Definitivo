@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../css/reportePersonal.css'
 
 const ReportePersonalTable = () => {
   const [data, setData] = useState([]);
@@ -64,7 +65,7 @@ const ReportePersonalTable = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div id='report-person' className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Reporte Personal</h2>
 
       <div className="mb-6">

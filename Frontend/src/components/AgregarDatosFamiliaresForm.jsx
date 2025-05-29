@@ -3,6 +3,8 @@ import axios from 'axios';
 import '../css/agregarPersonal.css';
 import FormInput from './FormInput';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
+
 
 const AgregarDatosFamiliaresForm = () => {
   const { register, handleSubmit, setValue, getValues, formState: { errors }, reset } = useForm();
@@ -22,7 +24,7 @@ const AgregarDatosFamiliaresForm = () => {
         // Si no hay fecha proporcionada, establecerla como null
         data.Fecha_Naci_Coyu = null;
       }
-  
+
       const token = localStorage.getItem('token');
       const response = await axios.post(
         'http://192.168.16.246:3003/api/InfoEmpleado',
@@ -34,7 +36,7 @@ const AgregarDatosFamiliaresForm = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
         alert('Datos familiares agregados exitosamente');
         reset(); // Limpiar el formulario después de agregar
@@ -50,10 +52,15 @@ const AgregarDatosFamiliaresForm = () => {
   const onBuscar = async () => {
     const { empleado_Dni } = getValues();
     if (!empleado_Dni) {
-      alert('Por favor, ingrese un DNI para buscar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingrese un DNI para buscar.',
+        confirmButtonColor: '#3085d6',
+      });
       return;
     }
-  
+
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
@@ -65,7 +72,7 @@ const AgregarDatosFamiliaresForm = () => {
           },
         }
       );
-  
+
       if (response.status === 200 && response.data.infoEmpleado) {
         const infoEmpleado = response.data.infoEmpleado;
         // Rellenar los valores del formulario con la respuesta de la API
@@ -85,7 +92,11 @@ const AgregarDatosFamiliaresForm = () => {
   const onActualizar = async () => {
     const { empleado_Dni, ...data } = getValues();
     if (!empleado_Dni) {
-      alert('Por favor, ingrese un DNI para actualizar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingresa un DNI para actualizar.',
+      });
       return;
     }
 
@@ -117,10 +128,10 @@ const AgregarDatosFamiliaresForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="container py-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="container py-5" id="formFamilia">
       <div className="row">
         <h2 className="text-center mb-4">Agregar Datos Familiares</h2>
-        
+
         <FormInput
           id="empleado_Dni"
           label="DNI"

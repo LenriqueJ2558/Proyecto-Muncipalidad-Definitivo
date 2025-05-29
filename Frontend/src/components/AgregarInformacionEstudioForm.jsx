@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../css/agregarPersonal.css';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
+import Swal from 'sweetalert2';
 
 const AgregarInformacionEstudioForm = () => {
   const { register, handleSubmit, setValue, getValues, formState: { errors }, reset } = useForm();
@@ -46,9 +47,13 @@ const AgregarInformacionEstudioForm = () => {
   };
 
   const onBuscar = async () => {
-    const { empleado_Dni } = getValues(); // Utiliza getValues para obtener el DNI
+    const { empleado_Dni } = getValues();
     if (!empleado_Dni) {
-      alert('Por favor, ingrese un DNI para buscar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingrese un DNI para buscar.',
+      });
       return;
     }
 
@@ -66,30 +71,43 @@ const AgregarInformacionEstudioForm = () => {
 
       if (response.status === 200 && response.data.infoEstudios.length > 0) {
         const infoEstudio = response.data.infoEstudios[0];
-        // Rellenar los valores del formulario con la respuesta de la API
         Object.keys(infoEstudio).forEach((key) => setValue(key, infoEstudio[key]));
-        setIsFechaRevaliAEnabled(!!infoEstudio.Fech_Revali_A); // Habilitar/deshabilitar Fecha Revalidación A según el valor existente
-        setIsFechaRevaliBEnabled(!!infoEstudio.Fech_Revali_B); // Habilitar/deshabilitar Fecha Revalidación B según el valor existente
+        setIsFechaRevaliAEnabled(!!infoEstudio.Fech_Revali_A);
+        setIsFechaRevaliBEnabled(!!infoEstudio.Fech_Revali_B);
       } else {
-        alert('No se encontraron datos para este DNI.');
+        Swal.fire({
+          icon: 'info',
+          title: 'Sin resultados',
+          text: 'No se encontraron datos para este DNI.',
+        });
       }
     } catch (error) {
-      alert(`Error al buscar datos: ${error.response?.data?.msg || error.message}`);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al buscar datos',
+        text: error.response?.data?.msg || error.message,
+      });
     }
   };
 
+
   const onActualizar = async () => {
-    const { empleado_Dni, ...data } = getValues(); // Utiliza getValues para obtener los valores del formulario
+    const { empleado_Dni, ...data } = getValues();
+
     if (!empleado_Dni) {
-      alert('Por favor, ingrese un DNI para actualizar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingrese un DNI para actualizar.',
+      });
       return;
     }
 
     if (!isFechaRevaliAEnabled) {
-      data.Fech_Revali_A = ''; // Enviar vacío si no está activado
+      data.Fech_Revali_A = '';
     }
     if (!isFechaRevaliBEnabled) {
-      data.Fech_Revali_B = ''; // Enviar vacío si no está activado
+      data.Fech_Revali_B = '';
     }
 
     try {
@@ -106,12 +124,24 @@ const AgregarInformacionEstudioForm = () => {
       );
 
       if (response.status === 200) {
-        alert('Datos actualizados exitosamente');
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualización exitosa',
+          text: 'Datos actualizados exitosamente.',
+        });
       } else {
-        alert(`Hubo un problema al actualizar los datos: ${response.status}`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `Hubo un problema al actualizar los datos: ${response.status}`,
+        });
       }
     } catch (error) {
-      alert(`Error al actualizar datos: ${error.response?.data?.msg || error.message}`);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error del servidor',
+        text: error.response?.data?.msg || error.message,
+      });
     }
   };
 
@@ -122,10 +152,10 @@ const AgregarInformacionEstudioForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="container py-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="container py-5" id="formEstudio">
       <div className="row">
         <h2 className="text-center mb-4">Agregar Información de Estudio</h2>
-        
+
         <FormInput
           id="empleado_Dni"
           label="DNI"
@@ -242,7 +272,7 @@ const AgregarInformacionEstudioForm = () => {
             { value: 'NO TENGO', label: 'NO TENGO' },
           ]}
         />
-         <FormInput
+        <FormInput
           id="N_Licen_A"
           label="Número de Licencia A"
           register={register}
@@ -255,7 +285,7 @@ const AgregarInformacionEstudioForm = () => {
           register={register}
           errors={errors}
         />
-        
+
 
         <div className="col-md-6 mb-3">
           <label className='form-label' htmlFor="Fech_Revali_A">Fecha de Revalidación A</label>
@@ -278,8 +308,8 @@ const AgregarInformacionEstudioForm = () => {
             </div>
           </div>
         </div>
-        
-        
+
+
 
         <div className="col-md-6 mb-3">
           <label className='form-label' htmlFor="Fech_Revali_B">Fecha de Revalidación B</label>
@@ -302,7 +332,7 @@ const AgregarInformacionEstudioForm = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="text-center">
           <button type="button" className="btn btn-secondary me-2" onClick={onLimpiar}>Limpiar</button>
           <button type="button" className="btn btn-primary me-2" onClick={onBuscar}>Buscar</button>

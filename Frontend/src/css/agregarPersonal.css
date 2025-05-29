@@ -1,3 +1,15 @@
+#containerAddPerson{
+  background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+#containerAddPerson h2{
+  color: #000000;
+  font-size: 26px;
+  font-weight: bold;
+}
+
 .agregar-personal-form {
   background: rgba(255, 255, 255, 0.8);
   padding: 2rem;
@@ -29,10 +41,6 @@ body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-h2 {
-  color: #ffffff;
 }
 
 .btn {
@@ -119,3 +127,43 @@ form {
   color:#000000
 }
 
+/*AGREGARSERVICIOFORM*/
+
+#dataServicePerson{
+    background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+#titleDataServicePerson{
+  color: #000000;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+
+/*FORMULARIO DE ESTUDIO*/
+#formEstudio{
+  background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+#formEstudio h2{
+  font-size: 26px;
+  color: #000000d0;
+  font-weight: bold;
+}
+
+/*FORM DATOS FAMILIARES*/
+#formFamilia{
+  background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+#formFamilia h2{
+  font-size: 26px;
+  color: #000000d0;
+  font-weight: bold;
+}

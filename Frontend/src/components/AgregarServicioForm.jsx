@@ -4,6 +4,8 @@ import axios from 'axios';
 import '../css/agregarPersonal.css';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
+import Swal from 'sweetalert2';
+
 
 const AgregarServicioForm = () => {
   const { register, handleSubmit, setValue, getValues, formState: { errors }, reset } = useForm();
@@ -41,9 +43,13 @@ const AgregarServicioForm = () => {
   };
 
   const onBuscar = async () => {
-    const { empleado_Dni } = getValues(); // Utiliza getValues para obtener el DNI
+    const { empleado_Dni } = getValues();
     if (!empleado_Dni) {
-      alert('Por favor, ingrese un DNI para buscar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingrese un DNI para buscar.',
+      });
       return;
     }
 
@@ -72,21 +78,29 @@ const AgregarServicioForm = () => {
     }
   };
 
-  const onActualizar = async () => {
-    const { empleado_Dni, ...data } = getValues(); // Utiliza getValues para obtener los valores del formulario
+   const onActualizar = async () => {
+    const { empleado_Dni, ...data } = getValues();
+
     if (!empleado_Dni) {
-      alert('Por favor, ingrese un DNI para actualizar.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campo requerido',
+        text: 'Por favor, ingrese un DNI para actualizar.',
+      });
       return;
     }
 
-    if (!isFechaSalidaEnabled) {
-      data.Fecha_Salida = ''; // Enviar vacío si no está activado
+    if (!isFechaRevaliAEnabled) {
+      data.Fech_Revali_A = '';
+    }
+    if (!isFechaRevaliBEnabled) {
+      data.Fech_Revali_B = '';
     }
 
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://192.168.16.246:3003/api/actividad/${empleado_Dni}`,
+        `http://192.168.16.246:3003/api/InfoEstudio/${empleado_Dni}`,
         data,
         {
           headers: {
@@ -97,12 +111,24 @@ const AgregarServicioForm = () => {
       );
 
       if (response.status === 200) {
-        alert('Datos actualizados exitosamente');
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualización exitosa',
+          text: 'Datos actualizados exitosamente.',
+        });
       } else {
-        alert(`Hubo un problema al actualizar los datos: ${response.status}`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `Hubo un problema al actualizar los datos: ${response.status}`,
+        });
       }
     } catch (error) {
-      alert(`Error al actualizar datos: ${error.response?.data?.msg || error.message}`);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error del servidor',
+        text: error.response?.data?.msg || error.message,
+      });
     }
   };
 
@@ -112,10 +138,10 @@ const AgregarServicioForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="container py-5">
+    <form onSubmit={handleSubmit(onSubmit)} id='dataServicePerson' className="container py-5">
       <div className="row">
-        <h2 className="text-center mb-4 ">Agregar Datos del Servicio</h2>
-        
+        <h2 id='titleDataServicePerson' className="text-center mb-4 ">Agregar Datos del Servicio</h2>
+
         <FormInput
           id="empleado_Dni"
           label="DNI"
@@ -157,6 +183,7 @@ const AgregarServicioForm = () => {
             { value: 'OTROS', label: 'OTROS' },
             { value: 'OPERADOR', label: 'OPERADOR' },
           ]}
+
         />
 
         <FormSelect
@@ -271,7 +298,7 @@ const AgregarServicioForm = () => {
           </div>
         </div>
 
-        
+
 
         <FormInput
           id="Peso"
@@ -285,8 +312,8 @@ const AgregarServicioForm = () => {
         <FormInput
           id="Estatura"
           label="Estatura (m)"
-          
-          
+
+
           register={register}
           errors={errors}
           validation={{ required: 'La estatura es obligatoria' }}

@@ -1,0 +1,16 @@
+#backUser {
+    background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+    width: 80%;
+}
+
+#backUser .row h2 {
+    font-size: 26px;
+    color: #000000d0;
+    font-weight: bold;
+}
+
+#backUser .btn{
+    background: #1c7c54d3;
+}

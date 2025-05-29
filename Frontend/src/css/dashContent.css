@@ -1,0 +1,18 @@
+.container{
+    background: none;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+}
+
+.container #caruchel{
+    width: 85%;
+    height: auto;
+    background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+.container #caruchel img{
+    border-radius: 20px;
+}

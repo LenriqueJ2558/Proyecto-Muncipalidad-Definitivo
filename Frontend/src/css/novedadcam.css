@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Keania+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Moonrocks&family=Sono:wght@200..800&display=swap');
+
+/* Estilo base del input */
+.codigo-btn {
+    width: 25%;
+    padding: 12px; /* 8px 16px */
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    color: #374151; /* text-gray-700 */
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+    transition: all 0.2s ease;
+    text-align: center;
+    box-shadow: -8px -8px #409b69;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+  
+  /* Placeholder styling */
+  .codigo-btn::placeholder {
+    color: #9ca3af; /* placeholder-gray-400 */
+    font-weight: 600;
+  }
+  
+  
+  /* Efecto focus - accesible */
+  .codigo-btn:focus {
+    outline: none;
+    border-color: #0e7c40; 
+  }
+  
+  /* Versión con icono (opcional) */
+  .input-with-icon {
+    position: relative;
+  }
+  
+  .input-with-icon .codigo-btn {
+    padding-left: 2.5rem; 
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 0.75rem; /* 12px */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af; /* Color del icono */
+  }
+
+
+/*BOTON PARA BUSCAR*/
+
+.search-btn{
+    border-radius: 50px;
+    background-color: #1c7c54d3;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(145deg, #9e972e, #1c7c54d3);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow:2px 2px 10px #374151;
+}
+
+.search-btn button:focus{
+    outline: none;
+    border-color: none;
+}
+
+.search-novedad{
+    background-color: #136140d3;
+    padding: 6px;
+    border-radius: 50px;
+    font-size: 16px;
+    color: #ffd60a;
+}
+
+/*NOVEDADES CAM*/
+.datanovcam{
+  width: 100%;
+  max-width: 1540px; 
+  margin-left: auto;
+  margin-right: auto; 
+  padding: 1.5rem; 
+  background-color: #ffffffc0; 
+  box-shadow: 0 2px 50px #ffee3286; 
+  border-radius: 20px; 
+}
+
+/*
+@media (max-width: 1280px){
+  .datanovcam{
+    width: 98%
+  }
+}*/
+
+#time{
+  background-color: #1c7c54d3;
+  padding: 5px;
+  border-radius: 5px;
+  font-family: "Sono", monospace;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #ffb700;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+#options_cam{
+  user-select: none;
+}

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import '../css/registrouser.css'
 
 const RegistrarUsuarioForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  
+
 
   const onSubmit = async (data) => {
     try {
@@ -18,7 +19,7 @@ const RegistrarUsuarioForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="container py-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="container py-5" id='backUser'>
       <div className="row">
         <h2 className="text-center mb-4">Registrar Nuevo Usuario</h2>
 
@@ -61,7 +62,7 @@ const RegistrarUsuarioForm = () => {
             id="Correo"
             type="email"
             className={`form-control ${errors.Correo ? 'is-invalid' : ''}`}
-            {...register('Correo', { 
+            {...register('Correo', {
               required: 'El campo Correo es obligatorio',
               pattern: {
                 value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
@@ -78,7 +79,7 @@ const RegistrarUsuarioForm = () => {
             id="empleado_Dni"
             type="text"
             className={`form-control ${errors.empleado_Dni ? 'is-invalid' : ''}`}
-            {...register('empleado_Dni', { 
+            {...register('empleado_Dni', {
               required: 'El campo DNI del Empleado es obligatorio',
               pattern: {
                 value: /^[0-9]{8}$/,
@@ -90,21 +91,21 @@ const RegistrarUsuarioForm = () => {
         </div>
 
         <div className="col-md-6 mb-3">
-  <label htmlFor="tipo_usuario_Id" className="form-label">Tipo de Usuario:</label>
-  <select
-    id="tipo_usuario_Id"
-    className={`form-control ${errors.tipo_usuario_Id ? 'is-invalid' : ''}`}
-    {...register('tipo_usuario_Id', { 
-      required: 'El campo Tipo de Usuario es obligatorio',
-    })}
-  >
-    <option value="">Selecciona un tipo de usuario</option>
-    <option value="1">Administrador</option>
-    <option value="2">Moderador</option>
-    <option value="3">Usuario</option>
-  </select>
-  {errors.tipo_usuario_Id && <div className="invalid-feedback">{errors.tipo_usuario_Id.message}</div>}
-</div>
+          <label htmlFor="tipo_usuario_Id" className="form-label">Tipo de Usuario:</label>
+          <select
+            id="tipo_usuario_Id"
+            className={`form-control ${errors.tipo_usuario_Id ? 'is-invalid' : ''}`}
+            {...register('tipo_usuario_Id', {
+              required: 'El campo Tipo de Usuario es obligatorio',
+            })}
+          >
+            <option value="">Selecciona un tipo de usuario</option>
+            <option value="1">Administrador</option>
+            <option value="2">Moderador</option>
+            <option value="3">Usuario</option>
+          </select>
+          {errors.tipo_usuario_Id && <div className="invalid-feedback">{errors.tipo_usuario_Id.message}</div>}
+        </div>
 
         <div className="col-12 mt-4 text-center">
           <button type="submit" className="btn btn-primary">Registrar Usuario</button>

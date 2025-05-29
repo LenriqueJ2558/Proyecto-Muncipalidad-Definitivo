@@ -106,7 +106,7 @@
 
 .form__input:focus {
   outline: none;
-  border-color: #1c7c54; /* Color azul al enfocar */
+  border-color: #1c7c54; 
 }
 
 .enter-button{

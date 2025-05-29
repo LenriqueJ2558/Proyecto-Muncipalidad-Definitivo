@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import '../css/detallerUser.css';
+import Swal from 'sweetalert2';
 
 const UserDetails = () => {
   const [userData, setUserData] = useState({
@@ -42,9 +44,19 @@ const UserDetails = () => {
       });
 
       if (response.ok) {
-        alert('Contraseña actualizada con éxito');
+        Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'Contraseña actualizada con éxito',
+          confirmButtonColor: '#3085d6',
+        });
       } else {
-        alert('Error al cambiar la contraseña');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al cambiar la contraseña',
+          confirmButtonColor: '#d33',
+        });
       }
     } catch (error) {
       console.error('Error al cambiar la contraseña:', error);
@@ -53,9 +65,9 @@ const UserDetails = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+      <div className="p-6 rounded-lg shadow-md max-w-2xl mx-auto" id="backUser">
         <h2 className="text-center text-2xl font-semibold mb-6 text-black">
-          <FontAwesomeIcon icon={faUserEdit} className="mr-2 text-blue-600" /> Detalles del Usuario
+          <FontAwesomeIcon icon={faUserEdit} id='iconUser' className="mr-2" /> Detalles del Usuario
         </h2>
         <div className="grid grid-cols-1 gap-6">
           <div>
@@ -78,9 +90,9 @@ const UserDetails = () => {
             />
           </div>
           <div className="text-center mt-4">
-            <button 
-              onClick={handlePasswordChange} 
-              className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <button
+              onClick={handlePasswordChange}
+              className=" text-white px-6 py-3 rounded-md" id='buttonDetalles'
             >
               Cambiar Contraseña
             </button>

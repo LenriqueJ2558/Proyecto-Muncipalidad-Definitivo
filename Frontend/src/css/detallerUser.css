@@ -1,0 +1,21 @@
+#backUser{
+    background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+#iconUser{
+   color: #1c7c54d3;
+}
+
+#backUser input{
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+#buttonDetalles{
+    background: #1c7c54d3;
+}
+
+#buttonDetalles:hover{
+    background: #146342d3;
+}
