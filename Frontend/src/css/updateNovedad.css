@@ -1,0 +1,81 @@
+.centrar-contenido{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.centrar-contenido .center-content{
+    width: 90%;
+    background-color: #ffffffc0;
+    box-shadow: 0 2px 50px #ffee3286;
+    border-radius: 20px;
+}
+
+.centrar-contenido .center-content .update-novedades .title{
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.num-estacion{
+    border: 2px solid #409b69;
+    background-color: white;
+    padding: 5px;
+    outline: none;
+    color: black;
+}
+
+.num-estacion:focus {
+    border: none;           /* quita el borde al hacer click */
+    outline: none;     
+    border: 2px solid #409b69;     /* asegura que no haya resaltado */
+  }
+
+  .des-novedad{
+    margin-top: 20px;
+  }
+
+  .text-area-content{
+    border: 2px solid #409b69;
+    padding: 13px;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    border-radius: 5px 5px 0px 0px;
+    outline: none;
+    color: black;
+  }
+
+  .ubicacion-novedad{
+    border: 2px solid #409b69;
+    background-color: white;
+    padding: 5px;
+    outline: none;
+    color: black;
+  }
+
+  
+.ubicacion-novedad:focus{
+    border: none;           /* quita el borde al hacer click */
+    outline: none;     
+    border: 2px solid #409b69;
+}
+
+#file-image-input{
+    background-color: white;
+    border: none;
+    padding: 5px;
+}
+
+#file-video-input{
+    background-color: white;
+    border: none;
+    padding: 5px;
+}
+
+.delete-data-novedad{
+    margin-top: 15px;
+    padding: 6px;
+    background-color: rgb(255, 42, 42);
+    width: 100%;
+    font-size: 16px;
+}

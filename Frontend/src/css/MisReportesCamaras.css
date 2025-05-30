@@ -1,121 +1,185 @@
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: Arial, sans-serif;
-  }
-  
-  .title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .search-container {
-    margin-bottom: 1rem;
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-  }
-  
-  .input {
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-  }
-  
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1.5rem;
-  }
-  
-  .data-table th,
-  .data-table td {
-    padding: 10px;
-    border: 1px solid black;
-    text-align: left;
-  }
-  
-  .data-table tr:hover {
-    background-color: #2F855A;
-    color: white;
-  }
-  
-  .descripcion {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-  }
-  
-  .descripcion.show {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
-  }
-  
-  .ver-mas {
-    color: blue;
-    cursor: pointer;
-    margin-left: 6px;
-    font-size: 0.9em;
-  }
-  
-  .pagination {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 20px;
-  }
-  
-  .pagination button {
-    padding: 8px 12px;
-    background-color: #2F855A;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .pagination button.active {
-    background-color: #1E6D4F;
-  }
-  
-  .pagination button:disabled {
-    background-color: gray;
-    cursor: not-allowed;
-  }
-  
-  .pagination button:hover:not(:disabled) {
-    background-color: #1E6D4F;
-  }
-  .pagination-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-  .reporte-wrapper {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-  }
-  .clear-button {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.container .reporte-wrapper {
+  background-color: #ffffffc0;
+  box-shadow: 0 2px 50px #ffee3286;
+  border-radius: 20px;
+}
+
+.container .reporte-wrapper .formreportsdate .search-container select option{
+  color: black;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: black;
+}
+
+.formreportsdate {
+  gap: 15px;
+  align-items: center;
+}
+
+label {
+  color: black;
+  font-weight: bold;
+}
+
+.search-container {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  width: 50%;
+}
+
+#selectoptions {
+  padding: 10px;
+  border: 2px solid #409b69;
+  border-radius: 5px;
+  background-color: white;
+  outline: none;
+  overflow: hidden;
+}
+
+.tabla-contenedor {
+  margin-top: 3%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0px rgba(0, 0, 0, 0.1); /* Opcional */
+  background-color: white;
+}
+
+.data-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table .table-labores{
+  background-color: #409b69;
+}
+
+.data-table .table-labores tr:hover{
+  background-color: none;
+}
+
+.data-table th,
+.data-table td {
+  padding: 10px;
+  text-align: left;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-table td{
+  background-color: white;
+  color: #409b69;
+  border-top: 1px solid #409b69;
+}
+
+/*
+.data-table tr:hover {
+  background-color: #2F855A;
+  color: white;
+}
+*/
+
+.descripcion {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.descripcion.show {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.ver-mas {
+  color: blue;
+  cursor: pointer;
+  margin-left: 6px;
+  font-size: 0.9em;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.pagination button {
   padding: 8px 12px;
-  margin-left: 10px;
+  background-color: #2F855A;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #1E6D4F;
+}
+
+.pagination button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #1E6D4F;
+}
+
+.pagination-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.reporte-wrapper {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+/*BOTON DELETE*/
+
+.clear-button {
+  padding: 10px;
   background-color: #f44336;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
+  margin-top: 1%;
 }
 
 .clear-button:hover {
   background-color: #d32f2f;
 }
+
 .abrir-button {
   padding: 6px 12px;
   background-color: #2196f3;

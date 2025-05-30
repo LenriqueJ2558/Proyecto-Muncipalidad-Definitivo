@@ -1,5 +1,5 @@
 const SelectEstado = ({ register, errors }) => (
-    <div className="mb-6 relative">
+    <div className="mb-6 relative mt-3">
       <label className="block text-black text-lg font-medium mb-2">Estado:</label>
       <select
         {...register('Estado', { required: 'Este campo es obligatorio' })}

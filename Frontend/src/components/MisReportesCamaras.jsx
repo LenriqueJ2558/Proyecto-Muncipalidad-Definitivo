@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../css/MisReportesCamaras.css';
 import { useNavigate } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus, faClipboardList, faGraduationCap, faUsers, faCalendarCheck, faUser, faUserEdit, faListCheck, faScrewdriverWrench, faChartPie, faAddressBook, faClipboardUser, faPersonCircleExclamation, faSquarePhone, faPersonMilitaryPointing, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const MAX_VISIBLE_PAGES = 15;
 
@@ -129,41 +131,47 @@ const MisReportesCamaras = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  
+
 
   return (
     <div className="container">
       <div className="reporte-wrapper">
         <h2 className="title">Mis Reportes de Cámaras</h2>
 
-        <div className="search-container">
-          <select
-            value={filtroTurno}
-            onChange={(e) => setFiltroTurno(e.target.value)}
-            className="input"
-          >
-            <option value="">Todos los Turnos</option>
-            <option value="DÍA">DÍA</option>
-            <option value="TARDE">TARDE</option>
-            <option value="NOCHE">NOCHE</option>
-          </select>
+        <div className="formreportsdate">
+          <div className="search-container">
+            <select
+              value={filtroTurno}
+              onChange={(e) => setFiltroTurno(e.target.value)}
+              className="input"
+              id='selectoptions'
+            >
+              <option value="">Todos los Turnos</option>
+              <option value="DÍA">DÍA</option>
+              <option value="TARDE">TARDE</option>
+              <option value="NOCHE">NOCHE</option>
+            </select>
 
-          <label>Desde:</label>
-          <input
-            type="date"
-            value={fechaDesde}
-            onChange={(e) => setFechaDesde(e.target.value)}
-            className="input"
-          />
+            <label>Desde:</label>
+            <input
+              type="date"
+              value={fechaDesde}
+              onChange={(e) => setFechaDesde(e.target.value)}
+              className="input"
+              id='selectoptions'
+            />
 
-          <label>Hasta:</label>
-          <input
-            type="date"
-            value={fechaHasta}
-            onChange={(e) => setFechaHasta(e.target.value)}
-            className="input"
-            min={fechaDesde}
-          />
+            <label>Hasta:</label>
+            <input
+              type="date"
+              value={fechaHasta}
+              onChange={(e) => setFechaHasta(e.target.value)}
+              className="input"
+              min={fechaDesde}
+              id='selectoptions'
+            />
+
+          </div>
 
           <button
             className="clear-button"
@@ -175,64 +183,68 @@ const MisReportesCamaras = () => {
               setCurrentPage(1);
             }}
           >
+            <FontAwesomeIcon icon={faTrash} style={{ marginRight: '5px' }} />
             Limpiar filtros
           </button>
         </div>
 
         {errorFecha && <p style={{ color: 'red', fontWeight: 'bold' }}>{errorFecha}</p>}
 
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Supervisor</th>
-              <th>Operador</th>
-              <th>Turno</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Descripción</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedItems.map((item, index) => (
-              <tr key={index}>
-                <td>{item.NombreSupervisor}</td>
-                <td>{item.NombreOperador}</td>
-                <td>{item.Turno}</td>
-                <td>{item.Fecha}</td>
-                <td>{item.hora_novedades}</td>
-                <td>
-                  <div className={`descripcion ${showMore[index] ? 'show' : ''}`}>
-                    {showMore[index]
-                      ? item.DescripciondeNovedad
-                      : item.DescripciondeNovedad.slice(0, 60)}
-                    {item.DescripciondeNovedad.length > 60 && (
-                      <span
-                        className="ver-mas"
-                        onClick={() => toggleShowMore(index)}
-                      >
-                        {showMore[index] ? ' Ver menos' : '... Ver más'}
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td>{item.Estado}</td>
-                <td>
-                  <button
-                    className="abrir-button"
-                    onClick={() => {
-                      console.log("ID que se manda:", item.idNovedades); // ✅ Aquí
-                      navigate(`novedades/${item.idNovedades}`)}
-                    }
-                  >
-                    Abrir
-                  </button>
-                </td>
+        <div className="tabla-contenedor">
+          <table className="data-table" id='tabledata'>
+            <thead>
+              <tr className='table-labores'>
+                <th>Supervisor</th>
+                <th>Operador</th>
+                <th>Turno</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paginatedItems.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.NombreSupervisor}</td>
+                  <td>{item.NombreOperador}</td>
+                  <td>{item.Turno}</td>
+                  <td>{item.Fecha}</td>
+                  <td>{item.hora_novedades}</td>
+                  <td>
+                    <div className={`descripcion ${showMore[index] ? 'show' : ''}`}>
+                      {showMore[index]
+                        ? item.DescripciondeNovedad
+                        : item.DescripciondeNovedad.slice(0, 60)}
+                      {item.DescripciondeNovedad.length > 60 && (
+                        <span
+                          className="ver-mas"
+                          onClick={() => toggleShowMore(index)}
+                        >
+                          {showMore[index] ? ' Ver menos' : '... Ver más'}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td>{item.Estado}</td>
+                  <td>
+                    <button
+                      className="abrir-button"
+                      onClick={() => {
+                        console.log("ID que se manda:", item.idNovedades); // ✅ Aquí
+                        navigate(`novedades/${item.idNovedades}`)
+                      }
+                      }
+                    >
+                      Abrir
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="pagination-container">
           <nav className="pagination">

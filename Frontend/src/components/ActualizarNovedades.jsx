@@ -14,6 +14,8 @@ import SelectTurno from './componentsCamara/SelectTurno';
 import SelectEstado from './componentsCamara/SelectEstado';
 import CamposGeolocalizacion from './componentsCamara/CamposGeolocalizacion';
 import SelectUbicacionCamara from './componentsCamara/SelectUbicacionCamara';
+import '../css/updateNovedad.css';
+
 const ActualizarNovedades = () => {
     const { id } = useParams(); // ← ID desde la URL
 
@@ -246,106 +248,110 @@ const ActualizarNovedades = () => {
     };
 
     return (
-        <div className="p-4 max-w-xl mx-auto">
-            <h2 className="text-xl font-bold mb-4">Actualizar Novedad de Cámara</h2>
+        <div className="centrar-contenido">
+            <div className="center-content">
+                <div className="p-4" id='update-novedades'>
+                    <h2 className="title">Actualizar Novedad de Cámara</h2>
 
-            <form onSubmit={handleSubmit(handleUpdate)}>
+                    <form onSubmit={handleSubmit(handleUpdate)}>
 
-                {/* General de Novedades */}
-                <GeneralDeNovedadesInput register={register} errors={errors} />
+                        {/* General de Novedades */}
+                        <GeneralDeNovedadesInput register={register} errors={errors} />
 
-                {/* Tipo de Novedades */}
-                <TipoDeNovedadesInput register={register} errors={errors} />
+                        {/* Tipo de Novedades */}
+                        <TipoDeNovedadesInput register={register} errors={errors} />
 
-                {/* Subtipo de Novedades */}
-                <SubTipoDeNovedadesInput register={register} errors={errors} />
-                {/* Buscar por Código */}
-                <div className="mb-6 flex flex-col gap-4">
-                    <div className="flex items-center gap-4">
-                        <label className="block text-gray-700 font-semibold mb-0.5">Buscar por Código:</label>
-                        <input
-                            type="text"
-                            {...register('CodigoBusqueda1')}
-                            className="codigo-btn"
-                            placeholder="Ingrese el código"
+                        {/* Subtipo de Novedades */}
+                        <SubTipoDeNovedadesInput register={register} errors={errors} />
+                        {/* Buscar por Código */}
+                        <div className="mb-6 flex flex-col gap-4">
+                            <div className="flex items-center gap-4">
+                                <label className="block text-gray-700 font-semibold mb-0.5">Buscar por Código:</label>
+                                <input
+                                    type="text"
+                                    {...register('CodigoBusqueda1')}
+                                    className="codigo-btn"
+                                    placeholder="Ingrese el código"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleSearch1}
+                                    className="search-btn"
+                                >
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} className='search-novedad' /> Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Nombre Supervisor */}
+                        <SelectSupervisor register={register} errors={errors} supervisores={supervisores} />
+
+                        {/* Nombre Operador */}
+                        <SelectOperador register={register} errors={errors} operadores={operadores} />
+
+                        <SelectTurno register={register} errors={errors} />
+
+                        <label>Número de Estación:</label>
+                        <input {...register('NumeroDeEstacion')} className="num-estacion" />
+
+                        <label className='des-novedad'>Descripción de Novedad:</label>
+                        <textarea {...register('DescripciondeNovedad')} className="text-area-content" />
+
+                        <label>Ubicación de Novedades:</label>
+                        <input {...register('ubicacion_novedades')} className="ubicacion-novedad" />
+                        
+                        <SelectEstado register={register} errors={errors} />
+
+                        <SelectUbicacionCamara
+                            register={register}
+                            selectedLocation={selectedLocation}
+                            handleSelectChange={handleSelectChange}
                         />
+                        <CamposGeolocalizacion locationData={locationData} register={register} />
+
+                        <label>Foto (opcional):</label>
+                        <input type="file" accept="image/*" onChange={handleFotoChange} className="mb-2" id='file-image-input'/>
+                        {previewFoto && (
+                            <img
+                                src={previewFoto instanceof File ? URL.createObjectURL(previewFoto) : previewFoto}
+                                alt="Vista previa"
+                                className="mb-4 w-55"
+                            />
+                        )}
+
+                        <label>Video (opcional):</label>
+                        <input type="file" accept="video/*" onChange={handleVideoChange} className="mb-2" id='file-video-input'/>
+                        {previewVideoUrl && !videoFile && (
+                            <video controls className="mb-4 w-full max-w-md">
+                                <source src={previewVideoUrl} type="video/mp4" />
+                                Tu navegador no soporta la reproducción de videos.
+                            </video>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="bg-green-600 text-white px-4 py-2 rounded w-full"
+                        >
+                            {loading ? 'Actualizando...' : 'Actualizar Novedad'}
+                        </button>
+
                         <button
                             type="button"
-                            onClick={handleSearch1}
-                            className="search-btn"
+                            onClick={() => {
+                                reset();
+                                setPreviewFoto(null);
+                                setVideoFile(null);
+                                setFechaNovedad('');
+                                setHoraNovedad('');
+                            }}
+                            className="delete-data-novedad"
                         >
-                            <FontAwesomeIcon icon={faMagnifyingGlass} className='search-novedad' /> Buscar
+                            Limpiar Formulario
                         </button>
-                    </div>
+                    </form>
                 </div>
-
-                {/* Nombre Supervisor */}
-                <SelectSupervisor register={register} errors={errors} supervisores={supervisores} />
-
-                {/* Nombre Operador */}
-                <SelectOperador register={register} errors={errors} operadores={operadores} />
-
-                <SelectTurno register={register} errors={errors} />
-
-                <label>Número de Estación:</label>
-                <input {...register('NumeroDeEstacion')} className="border p-2 w-full mb-2" />
-
-                <label>Descripción de Novedad:</label>
-                <textarea {...register('DescripciondeNovedad')} className="border p-2 w-full mb-2" />
-
-                <label>Ubicación de Novedades:</label>
-                <input {...register('ubicacion_novedades')} className="border p-2 w-full mb-2" />
-
-                <SelectEstado register={register} errors={errors} />
-
-                <SelectUbicacionCamara
-                    register={register}
-                    selectedLocation={selectedLocation}
-                    handleSelectChange={handleSelectChange}
-                />
-                <CamposGeolocalizacion locationData={locationData} register={register} />
-
-                <label>Foto (opcional):</label>
-                <input type="file" accept="image/*" onChange={handleFotoChange} className="mb-2" />
-                {previewFoto && (
-                    <img
-                        src={previewFoto instanceof File ? URL.createObjectURL(previewFoto) : previewFoto}
-                        alt="Vista previa"
-                        className="mb-4 w-64"
-                    />
-                )}
-
-                <label>Video (opcional):</label>
-                <input type="file" accept="video/*" onChange={handleVideoChange} className="mb-2" />
-                {previewVideoUrl && !videoFile && (
-                    <video controls className="mb-4 w-full max-w-md">
-                        <source src={previewVideoUrl} type="video/mp4" />
-                        Tu navegador no soporta la reproducción de videos.
-                    </video>
-                )}
-
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-green-600 text-white px-4 py-2 rounded w-full"
-                >
-                    {loading ? 'Actualizando...' : 'Actualizar Novedad'}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => {
-                        reset();
-                        setPreviewFoto(null);
-                        setVideoFile(null);
-                        setFechaNovedad('');
-                        setHoraNovedad('');
-                    }}
-                    className="bg-gray-500 text-white px-4 py-2 rounded w-full mt-3"
-                >
-                    Limpiar Formulario
-                </button>
-            </form>
+            </div>
         </div>
     );
 };
