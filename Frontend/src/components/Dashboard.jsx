@@ -1,24 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Routes, Route, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faClipboardList, faGraduationCap, faUsers, faCalendarCheck, faUser, faUserEdit, faListCheck, faScrewdriverWrench, faChartPie, faAddressBook, faClipboardUser, faPersonCircleExclamation, faSquarePhone, faPersonMilitaryPointing, faCamera, faTimes, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faClipboardList, faGraduationCap, faUsers, faCalendarCheck, faUser, faUserEdit, faListCheck, faScrewdriverWrench, faChartPie, faAddressBook, faClipboardUser, faPersonCircleExclamation, faSquarePhone, faPersonMilitaryPointing, faCamera } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Dashboard.css';
 import DashboardContent from './DashboardContent';
 import buoImage from '../image/buo.png';
 import Camaras from '../image/camaras.png';
+import ActualizarNovedades from './ActualizarNovedades';
 
-
-
-
-
-// Componente Modal
 const WelcomeModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
   return (
     <div className="welcome-modal" onClick={(e) => {
-      // Cerrar el modal si se hace clic fuera del contenido
       if (e.target.className === 'welcome-modal') onClose();
     }}>
       <div className="modal-content">
@@ -29,9 +24,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
           </div>
           <p className="modal-text">Recuerda subir las novedades del día para mantenernos todos informados y asegurar una buena gestión del servicio.</p>
           <div className="modal-button">
-            <button className="modal-btn" onClick={onClose}>
-              Entendido
-            </button>
+            <button className="modal-btn" onClick={onClose}>Entendido</button>
           </div>
         </div>
         <div className="modal-img">
@@ -44,24 +37,18 @@ const WelcomeModal = ({ isOpen, onClose }) => {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
   const fullName = localStorage.getItem('Nombre');
   const role = localStorage.getItem('TipoRol');
-
   const [activeMenu, setActiveMenu] = useState('');
   const [selectedContent, setSelectedContent] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showModal, setShowModal] = useState(true); // Modal visible por defecto
+  const [showModal, setShowModal] = useState(true);
   const [showNovedadesCamarasSubmenu, setShowNovedadesCamarasSubmenu] = useState(false);
 
-  // Cerrar el modal
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  const handleCloseModal = () => setShowModal(false);
 
   const handleLogout = async () => {
     try {
-      // Llama a tu API de signout
       await fetch('http://192.168.16.246:3003/api/auth/signout', {
         method: 'POST',
         headers: {
@@ -72,10 +59,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     } finally {
-      // Remover datos de localStorage y navegar a la página de login
-      localStorage.removeItem('token');
-      localStorage.removeItem('Nombre');
-      localStorage.removeItem('TipoRol');
+      localStorage.clear();
       navigate('/login');
     }
   };
@@ -83,33 +67,28 @@ const Dashboard = () => {
   const handleMenuClick = (menu) => {
     setActiveMenu(menu);
     setSelectedContent('');
+    navigate('/dashboard');
   };
 
   const handleSubMenuClick = (content) => {
     setSelectedContent(content);
+    navigate('/dashboard');
   };
 
-  const handleUserMenuToggle = () => {
-    setShowUserMenu(!showUserMenu);
-  };
+  const handleUserMenuToggle = () => setShowUserMenu(!showUserMenu);
 
-  // Cerrar el modal si se hace clic fuera de él
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showModal && event.target.classList.contains('modal')) {
         setShowModal(false);
       }
     };
-
     document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [showModal]);
 
   return (
     <div className="content-body">
-      {/* Modal de Bienvenida */}
       <WelcomeModal isOpen={showModal} onClose={handleCloseModal} />
 
       <nav className="navbar-custom p-4 flex justify-between items-center">
@@ -119,36 +98,21 @@ const Dashboard = () => {
         <div className="flex items-center space-x-4 relative">
           <div><h2>Bienvenido</h2>{fullName}</div>
           <div className="relative">
-            <button
-              onClick={handleUserMenuToggle}
-              className="text-white focus:outline-none"
-            >
+            <button onClick={handleUserMenuToggle} className="text-white focus:outline-none">
               <FontAwesomeIcon icon={faUser} size="lg" />
             </button>
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-48 rounded-md py-2 z-10" id='menuUser'>
-                <button
-                  onClick={() => handleSubMenuClick('registrar-usuario')}
-                  className="block px-4 py-2 text-sm w-full text-left"
-                >
+                <button onClick={() => handleSubMenuClick('registrar-usuario')} className="block px-4 py-2 text-sm w-full text-left">
                   <FontAwesomeIcon icon={faUserPlus} /> Registrar Usuario
                 </button>
-                <button
-                  onClick={() => handleSubMenuClick('detalles-usuario')}
-                  className="block px-4 py-2 text-sm w-full text-left"
-                >
+                <button onClick={() => handleSubMenuClick('detalles-usuario')} className="block px-4 py-2 text-sm w-full text-left">
                   <FontAwesomeIcon icon={faUserEdit} /> Detalles del Usuario
                 </button>
-                <button
-                  onClick={() => handleSubMenuClick('lista-usuarios')}
-                  className="block px-4 py-2 text-sm w-full text-left"
-                >
+                <button onClick={() => handleSubMenuClick('lista-usuarios')} className="block px-4 py-2 text-sm w-full text-left">
                   <FontAwesomeIcon icon={faUsers} /> Lista de Usuarios
                 </button>
-                <button
-                  onClick={handleLogout}
-                  className="block px-4 py-2 text-sm w-full text-left"
-                >
+                <button onClick={handleLogout} className="block px-4 py-2 text-sm w-full text-left">
                   Cerrar Sesión
                 </button>
               </div>
@@ -160,28 +124,16 @@ const Dashboard = () => {
       <div className="flex flex-grow mt-[1%]">
         <aside className="sidebar-custom w-64 text-white flex-shrink-0">
           <nav>
-            <button
-              className={`w-full text-left px-4 py-2 ${activeMenu === 'sub-gerencia' ? 'active' : ''}`}
-              onClick={() => handleMenuClick('sub-gerencia')}
-            >
+            <button className={`w-full text-left px-4 py-2 ${activeMenu === 'sub-gerencia' ? 'active' : ''}`} onClick={() => handleMenuClick('sub-gerencia')}>
               Sub Gerencia
             </button>
-            <button
-              className={`w-full text-left px-4 py-2 ${activeMenu === 'ciem' ? 'active' : ''}`}
-              onClick={() => handleMenuClick('ciem')}
-            >
+            <button className={`w-full text-left px-4 py-2 ${activeMenu === 'ciem' ? 'active' : ''}`} onClick={() => handleMenuClick('ciem')}>
               CIEM
             </button>
-            <button
-              className={`w-full text-left px-4 py-2 ${activeMenu === 'reportes' ? 'active' : ''}`}
-              onClick={() => handleMenuClick('reportes')}
-            >
+            <button className={`w-full text-left px-4 py-2 ${activeMenu === 'reportes' ? 'active' : ''}`} onClick={() => handleMenuClick('reportes')}>
               Reportes
             </button>
-            <button
-              className={`w-full text-left px-4 py-2 ${activeMenu === 'novedades' ? 'active' : ''}`}
-              onClick={() => handleMenuClick('novedades')}
-            >
+            <button className={`w-full text-left px-4 py-2 ${activeMenu === 'novedades' ? 'active' : ''}`} onClick={() => handleMenuClick('novedades')}>
               Reportes de Novedades
             </button>
           </nav>
@@ -231,10 +183,7 @@ const Dashboard = () => {
             )}
             {activeMenu === 'novedades' && (
               <nav>
-                <button
-                  className="w-full text-left py-1"
-                  onClick={() => setShowNovedadesCamarasSubmenu(!showNovedadesCamarasSubmenu)}
-                >
+                <button className="w-full text-left py-1" onClick={() => setShowNovedadesCamarasSubmenu(!showNovedadesCamarasSubmenu)}>
                   <FontAwesomeIcon icon={faCamera} /> Novedades de Cámaras
                 </button>
                 {showNovedadesCamarasSubmenu && (
@@ -262,7 +211,10 @@ const Dashboard = () => {
         </aside>
 
         <main className="dash-novedades">
-          <DashboardContent selectedContent={selectedContent} />
+          <Routes>
+            <Route path="/" element={<DashboardContent selectedContent={selectedContent} />} />
+            <Route path="novedades/:id" element={<ActualizarNovedades />} />
+          </Routes>
         </main>
       </div>
 

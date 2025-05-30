@@ -6,6 +6,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import AuthRoute from './utils/AuthRoute'; // Importa el nuevo componente AuthRoute
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 function App() {
   return (
     <Router>

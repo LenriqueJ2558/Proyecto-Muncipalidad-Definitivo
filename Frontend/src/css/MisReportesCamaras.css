@@ -103,3 +103,28 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
   }
+  .clear-button {
+  padding: 8px 12px;
+  margin-left: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  background-color: #d32f2f;
+}
+.abrir-button {
+  padding: 6px 12px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.abrir-button:hover {
+  background-color: #1976d2;
+}

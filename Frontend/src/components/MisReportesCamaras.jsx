@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../css/MisReportesCamaras.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const MAX_VISIBLE_PAGES = 15;
+
 
 const MisReportesCamaras = () => {
   const [allData, setAllData] = useState([]);
@@ -10,19 +13,23 @@ const MisReportesCamaras = () => {
   const [itemsPerPage] = useState(15);
   const [pageRange, setPageRange] = useState({ start: 1, end: MAX_VISIBLE_PAGES });
 
-  const [searchSupervisor, setSearchSupervisor] = useState('');
-  const [searchOperador, setSearchOperador] = useState('');
+  const [filtroTurno, setFiltroTurno] = useState('');
+  const [fechaDesde, setFechaDesde] = useState('');
+  const [fechaHasta, setFechaHasta] = useState('');
+  const [errorFecha, setErrorFecha] = useState('');
   const [showMore, setShowMore] = useState({});
-
   const [filteredItems, setFilteredItems] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://192.168.16.246:3003/api/novedades-camara');
         const reportes = response.data;
-  
+
         const formatted = reportes.map(item => ({
+          idNovedades: item.idNovedades,
           NombreSupervisor: item.NombreSupervisor || '',
           NombreOperador: item.NombreOperador || '',
           Turno: item.Turno || '',
@@ -31,34 +38,59 @@ const MisReportesCamaras = () => {
           DescripciondeNovedad: item.DescripciondeNovedad || '',
           Estado: item.Estado || '',
         }));
-  
-        // Ordenar por fecha descendente
+
         formatted.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
-  
         setAllData(formatted);
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
     };
-  
+
     fetchData();
   }, []);
 
   useEffect(() => {
-    // Filtrar los datos
-    const filtered = allData.filter(item =>
-      item.NombreSupervisor.toLowerCase().includes(searchSupervisor.toLowerCase()) &&
-      item.NombreOperador.toLowerCase().includes(searchOperador.toLowerCase())
-    );
+    let filtered = allData;
+
+    if (filtroTurno) {
+      filtered = filtered.filter(item => item.Turno === filtroTurno);
+    }
+
+    if (fechaDesde && fechaHasta) {
+      const desde = new Date(fechaDesde);
+      const hasta = new Date(fechaHasta);
+
+      if (desde > hasta) {
+        setErrorFecha('La fecha "Desde" no puede ser mayor que la fecha "Hasta".');
+        return;
+      } else {
+        setErrorFecha('');
+      }
+
+      filtered = filtered.filter(item => {
+        const fechaItem = new Date(item.Fecha);
+        return fechaItem >= desde && fechaItem <= hasta;
+      });
+    } else {
+      setErrorFecha('');
+      if (fechaDesde) {
+        filtered = filtered.filter(item => new Date(item.Fecha) >= new Date(fechaDesde));
+      }
+      if (fechaHasta) {
+        filtered = filtered.filter(item => new Date(item.Fecha) <= new Date(fechaHasta));
+      }
+    }
+
     setFilteredItems(filtered);
 
-    // Actualizar el rango de páginas según los datos filtrados
     const totalPages = Math.ceil(filtered.length / itemsPerPage);
     setPageRange({
       start: 1,
       end: Math.min(MAX_VISIBLE_PAGES, totalPages)
     });
-  }, [allData, searchSupervisor, searchOperador]);
+
+    setCurrentPage(1);
+  }, [allData, filtroTurno, fechaDesde, fechaHasta]);
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
@@ -92,10 +124,12 @@ const MisReportesCamaras = () => {
     }));
   };
 
+
   const paginatedItems = filteredItems.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  
 
   return (
     <div className="container">
@@ -103,21 +137,49 @@ const MisReportesCamaras = () => {
         <h2 className="title">Mis Reportes de Cámaras</h2>
 
         <div className="search-container">
+          <select
+            value={filtroTurno}
+            onChange={(e) => setFiltroTurno(e.target.value)}
+            className="input"
+          >
+            <option value="">Todos los Turnos</option>
+            <option value="DÍA">DÍA</option>
+            <option value="TARDE">TARDE</option>
+            <option value="NOCHE">NOCHE</option>
+          </select>
+
+          <label>Desde:</label>
           <input
-            type="text"
-            placeholder="Buscar por Supervisor"
-            value={searchSupervisor}
-            onChange={(e) => setSearchSupervisor(e.target.value)}
+            type="date"
+            value={fechaDesde}
+            onChange={(e) => setFechaDesde(e.target.value)}
             className="input"
           />
+
+          <label>Hasta:</label>
           <input
-            type="text"
-            placeholder="Buscar por Operador"
-            value={searchOperador}
-            onChange={(e) => setSearchOperador(e.target.value)}
+            type="date"
+            value={fechaHasta}
+            onChange={(e) => setFechaHasta(e.target.value)}
             className="input"
+            min={fechaDesde}
           />
+
+          <button
+            className="clear-button"
+            onClick={() => {
+              setFiltroTurno('');
+              setFechaDesde('');
+              setFechaHasta('');
+              setErrorFecha('');
+              setCurrentPage(1);
+            }}
+          >
+            Limpiar filtros
+          </button>
         </div>
+
+        {errorFecha && <p style={{ color: 'red', fontWeight: 'bold' }}>{errorFecha}</p>}
 
         <table className="data-table">
           <thead>
@@ -129,6 +191,7 @@ const MisReportesCamaras = () => {
               <th>Hora</th>
               <th>Descripción</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -155,6 +218,17 @@ const MisReportesCamaras = () => {
                   </div>
                 </td>
                 <td>{item.Estado}</td>
+                <td>
+                  <button
+                    className="abrir-button"
+                    onClick={() => {
+                      console.log("ID que se manda:", item.idNovedades); // ✅ Aquí
+                      navigate(`novedades/${item.idNovedades}`)}
+                    }
+                  >
+                    Abrir
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -162,16 +236,10 @@ const MisReportesCamaras = () => {
 
         <div className="pagination-container">
           <nav className="pagination">
-            <button onClick={() => paginate(1)} disabled={currentPage === 1}>
-              Primera
-            </button>
-            <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
-              Anterior
-            </button>
+            <button onClick={() => paginate(1)} disabled={currentPage === 1}>Primera</button>
+            <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Anterior</button>
 
-            {pageRange.start > 1 && (
-              <button onClick={() => paginate(pageRange.start - 1)}>...</button>
-            )}
+            {pageRange.start > 1 && <button onClick={() => paginate(pageRange.start - 1)}>...</button>}
 
             {[...Array(pageRange.end - pageRange.start + 1)].map((_, i) => {
               const page = i + pageRange.start;
@@ -186,16 +254,10 @@ const MisReportesCamaras = () => {
               );
             })}
 
-            {pageRange.end < totalPages && (
-              <button onClick={() => paginate(pageRange.end + 1)}>...</button>
-            )}
+            {pageRange.end < totalPages && <button onClick={() => paginate(pageRange.end + 1)}>...</button>}
 
-            <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
-              Siguiente
-            </button>
-            <button onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>
-              Última
-            </button>
+            <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>Siguiente</button>
+            <button onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>Última</button>
           </nav>
         </div>
       </div>
