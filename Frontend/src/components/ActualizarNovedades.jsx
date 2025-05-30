@@ -12,7 +12,8 @@ import SelectSupervisor from './componentsCamara/SelectSupervisor';
 import SelectOperador from './componentsCamara/SelectOperador';
 import SelectTurno from './componentsCamara/SelectTurno';
 import SelectEstado from './componentsCamara/SelectEstado';
-
+import CamposGeolocalizacion from './componentsCamara/CamposGeolocalizacion';
+import SelectUbicacionCamara from './componentsCamara/SelectUbicacionCamara';
 const ActualizarNovedades = () => {
     const { id } = useParams(); // ← ID desde la URL
 
@@ -29,11 +30,50 @@ const ActualizarNovedades = () => {
     const [supervisores, setSupervisores] = useState([]);
     const [operadores, setOperadores] = useState([]);
     const [previewFoto, setPreviewFoto] = useState(null);
+    const [selectedLocation, setSelectedLocation] = useState('');
     const [videoFile, setVideoFile] = useState(null);
-    const [latitud, setLatitud] = useState('');
-    const [longitud, setLongitud] = useState('');
-    const [localizacion, setLocalizacion] = useState('');
+    const [previewVideoUrl, setPreviewVideoUrl] = useState(null);
+    const [locationData, setLocationData] = useState({
+        longitud: '',
+        latitud: '',
+        localizacion: ''
+    });
 
+
+    const fetchLocationData = async (locationName) => {
+        try {
+            const response = await fetch(`http://192.168.16.246:3003/api/localizacion/${locationName}`);
+            const data = await response.json();
+
+            console.log('Datos recibidos:', data);
+            // Actualizar los campos con los datos obtenidos
+            setLocationData({
+                longitud: data.LOG || '',
+                latitud: data.LAT || '',
+                localizacion: data.LOCALIZACION || '',
+
+            });
+            setValue('Lat', data.LAT || '');
+            setValue('Longitud', data.LOG || '');
+            setValue('Localizacion', data.LOCALIZACION || '');
+
+        } catch (error) {
+            console.error('Error al obtener los datos de la API:', error);
+        }
+    };
+
+    // Efecto para llamar a la API cuando se selecciona una opción
+    useEffect(() => {
+        if (selectedLocation) {
+            // Verificar valor seleccionado
+            fetchLocationData(selectedLocation);
+        }
+    }, [selectedLocation]);
+    const handleSelectChange = (e) => {
+        const newSelectedLocation = e.target.value;
+        setSelectedLocation(newSelectedLocation);
+        console.log('Ubicación seleccionada:', newSelectedLocation); // Actualizamos primero el estado del select
+    };
     // Cargar datos al entrar
     useEffect(() => {
         const fetchData = async () => {
@@ -54,14 +94,20 @@ const ActualizarNovedades = () => {
                     setValue('DescripciondeNovedad', data.DescripciondeNovedad || '');
                     setValue('ubicacion_novedades', data.ubicacion_novedades || '');
                     setValue('Estado', data.Estado || '');
+                    setSelectedLocation(data.UbiCamara || ''); // actualiza el <select>
+                    setLocationData({
+                        latitud: data.Lat || '',
+                        longitud: data.Longitud || '',
+                        localizacion: data.Localizacion || '',
+                    });
                     setValue('UbiCamara', data.UbiCamara || '');
                     setValue('Lat', data.Lat || '');
                     setValue('Longitud', data.Longitud || '');
                     setValue('Localizacion', data.Localizacion || '');
 
 
-                    setPreviewFoto(data.imagenUrl || null);
-                    setVideoFile(null);
+                    setPreviewFoto(data.Foto ? `http://192.168.16.246:3003/api${data.Foto}` : null);
+                    setPreviewVideoUrl(data.UrlVideo || null);
                 } else {
                     Swal.fire('No se encontró la novedad', '', 'warning');
                 }
@@ -239,7 +285,7 @@ const ActualizarNovedades = () => {
                 {/* Nombre Operador */}
                 <SelectOperador register={register} errors={errors} operadores={operadores} />
 
-               <SelectTurno register={register} errors={errors} />
+                <SelectTurno register={register} errors={errors} />
 
                 <label>Número de Estación:</label>
                 <input {...register('NumeroDeEstacion')} className="border p-2 w-full mb-2" />
@@ -251,17 +297,13 @@ const ActualizarNovedades = () => {
                 <input {...register('ubicacion_novedades')} className="border p-2 w-full mb-2" />
 
                 <SelectEstado register={register} errors={errors} />
-                
-                <label>Ubicación de Cámara:</label>
-                <input {...register('UbiCamara')} className="border p-2 w-full mb-2" />
-                <label>Latitud:</label>
-                <input {...register('Lat')} className="border p-2 w-full mb-2" />
 
-                <label>Longitud:</label>
-                <input {...register('Longitud')} className="border p-2 w-full mb-2" />
-
-                <label>Localización:</label>
-                <input {...register('Localizacion')} className="border p-2 w-full mb-4" />
+                <SelectUbicacionCamara
+                    register={register}
+                    selectedLocation={selectedLocation}
+                    handleSelectChange={handleSelectChange}
+                />
+                <CamposGeolocalizacion locationData={locationData} register={register} />
 
                 <label>Foto (opcional):</label>
                 <input type="file" accept="image/*" onChange={handleFotoChange} className="mb-2" />
@@ -274,7 +316,13 @@ const ActualizarNovedades = () => {
                 )}
 
                 <label>Video (opcional):</label>
-                <input type="file" accept="video/*" onChange={handleVideoChange} className="mb-4" />
+                <input type="file" accept="video/*" onChange={handleVideoChange} className="mb-2" />
+                {previewVideoUrl && !videoFile && (
+                    <video controls className="mb-4 w-full max-w-md">
+                        <source src={previewVideoUrl} type="video/mp4" />
+                        Tu navegador no soporta la reproducción de videos.
+                    </video>
+                )}
 
                 <button
                     type="submit"

@@ -12,37 +12,28 @@ const createNovedadesCamara = async (req, res) => {
     const {
       NombreSupervisor, NombreOperador, Turno, Fecha, GeneralDeNovedades,
       TipoDeNovedades, SubTipoNovedades, NumeroDeEstacion, DescripciondeNovedad,
-      ubicacion_novedades, hora_novedades, Estado, UbiCamara, Lat, Longitud, Localizacion
+      ubicacion_novedades, hora_novedades, Estado, UbiCamara, Lat, Longitud,
+      Localizacion, URLVIDEO  // <-- Aquí traemos URLVIDEO desde el body
     } = req.body;
 
-    // Verificar que los archivos de video e imagen existan
-    const video = req.files?.['video']?.[0] || null;
     const imagen = req.files?.['imagen']?.[0] || null;
 
-    console.log("📌 Video recibido:", video);
     console.log("📌 Imagen recibida:", imagen);
 
-    if (!video && !imagen) {
+    if (!URLVIDEO && !imagen) {
       console.warn("⚠️ No se recibió ni video ni imagen.");
-      return res.status(400).json({ msg: 'Debe subir al menos un archivo' });
+      return res.status(400).json({ msg: 'Debe subir al menos un archivo (imagen) o un enlace de video.' });
     }
 
-    // Generar las rutas para los archivos
-    const videoPath = video ? `/uploads/videosNovedades/${video.filename}` : null;
     const imagenPath = imagen ? `/uploads/imagenesNovedades/${imagen.filename}` : null;
-
-    console.log("📌 Ruta del video:", videoPath);
     console.log("📌 Ruta de la imagen:", imagenPath);
-
-    // Crear la URL completa del video
-    const videoUrl = video ? `http://192.168.16.246:3003/api${videoPath}` : null;
 
     // Guardar los datos en la base de datos
     const createdNovedades = await NovedadesCamara.create({
       NombreSupervisor, NombreOperador, Turno, Fecha, GeneralDeNovedades,
       TipoDeNovedades, SubTipoNovedades, NumeroDeEstacion, DescripciondeNovedad,
-      Foto: imagenPath,  // Guardamos la ruta de la imagen
-      UrlVideo: videoUrl,  // Guardamos la URL completa del video
+      Foto: imagenPath,
+      UrlVideo: URLVIDEO,  // Usamos directamente el valor del body
       ubicacion_novedades, hora_novedades, Estado, UbiCamara, Lat, Longitud, Localizacion
     });
 
@@ -50,7 +41,7 @@ const createNovedadesCamara = async (req, res) => {
 
     return res.status(201).json({
       msg: 'Novedad creada con éxito',
-      videoUrl,  // Incluimos la URL del video en la respuesta
+      videoUrl: URLVIDEO,
       createdNovedades,
     });
 

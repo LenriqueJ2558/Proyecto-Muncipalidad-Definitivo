@@ -12,6 +12,10 @@ import AutoResizeTextarea from './componentsCamara/textarea';
 import SelectSupervisor from './componentsCamara/SelectSupervisor';
 import SelectOperador from './componentsCamara/SelectOperador';
 import SelectUbicacionCamara from './componentsCamara/SelectUbicacionCamara';
+import BuscarPorCodigo from './componentsCamara/BuscarPorCodigo';
+import CamposGeolocalizacion from './componentsCamara/CamposGeolocalizacion';
+import CampoFoto from './componentsCamara/CampoFoto';
+import CampoVideo from './componentsCamara/CampoVideo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faClipboardList, faGraduationCap, faUsers, faCalendarCheck, faUser, faUserEdit, faListCheck, faScrewdriverWrench, faChartPie, faAddressBook, faClipboardUser, faPersonCircleExclamation, faSquarePhone, faPersonMilitaryPointing, faCamera, faTimes, faMagnifyingGlass, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -172,10 +176,10 @@ const FormularioNovedades = () => {
       formData.append('Localizacion', locationData.localizacion);
 
       // Verificar que videoFile sea un archivo y agregarlo a FormData
-      if (videoFile && videoFile instanceof File) {
-        formData.append('video', videoFile); // Asegurarse de que sea un archivo
+      if (videoUrl) {
+        formData.append('URLVIDEO', videoUrl);
       } else {
-        console.error("🚨 videoFile no es un archivo válido o está vacío.");
+        console.warn("🚨 No se encontró la URL del video convertido.");
       }
 
       // Verificar que previewFoto sea un archivo y agregarlo a FormData
@@ -306,9 +310,6 @@ const FormularioNovedades = () => {
     }
   };
 
-
-
-
   const clearForm = () => {
     reset({
       NombreSupervisor: '',
@@ -366,44 +367,21 @@ const FormularioNovedades = () => {
         <SubTipoDeNovedadesInput register={register} errors={errors} />
 
         {/* Foto */}
-        <div className="mb-6 flex flex-col gap-4">
-          <div className="mb-6">
-            <label className="block text-black text-lg font-medium mb-2">Foto:</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white text-black"
-            />
-            <div className="w-90 h-90 border border-gray-400 rounded-lg overflow-hidden flex items-center justify-center">
-              {previewFoto ? (
-                <img src={URL.createObjectURL(previewFoto)} alt="Vista previa" className="object-cover w-full h-full" />
-              ) : (
-                <span className="text-gray-400">Sin imagen</span>
-              )}
-            </div>
-            {errors.Foto && <p className="text-red-500">{errors.Foto.message}</p>}
-          </div>
-
-        </div>
+        <CampoFoto
+          handleFileChange={handleFileChange}
+          previewFoto={previewFoto}
+          errors={errors}
+        />
 
         {/* Buscar por Código */}
         <div className="mb-6 flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <label className="block text-gray-700 font-semibold mb-0.5">Buscar por Código:</label>
-            <input
-              type="text"
-              {...register('CodigoBusqueda1')}
-              className="codigo-btn"
-              placeholder="Ingrese el código"
-            />
-            <button
-              onClick={handleSearch1}
-              className="search-btn"
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} className='search-novedad' /> Buscar
-            </button>
-          </div>
+          <BuscarPorCodigo
+            label="Buscar por Código:"
+            placeholder="Ingrese el código"
+            onClick={handleSearch1}
+            register={register}
+            name="CodigoBusqueda1"
+          />
 
           {/*Numero de Estacion: */}
           <SelectNumeroEstacion register={register} errors={errors} />
@@ -423,42 +401,7 @@ const FormularioNovedades = () => {
             selectedLocation={selectedLocation}
             handleSelectChange={handleSelectChange}
           />
-          {/*Longitud:*/}
-          <div className="mb-6">
-            <label className="block text-black text-lg font-medium mb-2">Longitud:</label>
-            <input
-              type="text"
-              value={locationData.longitud} // Aquí se debería mostrar el valor de `longitud`
-              {...register('Longitud')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white text-black"
-              placeholder="Longitud"
-              disabled
-            />
-          </div>
-          {/*Latitud:*/}
-          <div className="mb-6">
-            <label className="block text-black text-lg font-medium mb-2 ">Latitud:</label>
-            <input
-              type="text"
-              value={locationData.latitud} // Aquí se debería mostrar el valor de `latitud`
-              {...register('Lat')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white text-black"
-              placeholder="Latitud"
-              disabled
-            />
-          </div>
-          {/*Localizacion:*/}
-          <div className="mb-6">
-            <label className="block text-black text-lg font-medium mb-2">Localización:</label>
-            <input
-              type="text"
-              value={locationData.localizacion} // Aquí se debería mostrar el valor de `localizacion`
-              {...register('Localizacion')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white text-black"
-              placeholder="Ingrese la ubicación de la novedad"
-              disabled
-            />
-          </div>
+          <CamposGeolocalizacion locationData={locationData} register={register} />
           {/*Estado:*/}
           <SelectEstado register={register} errors={errors} />
           <div>
@@ -467,40 +410,12 @@ const FormularioNovedades = () => {
             ></AutoResizeTextarea>
           </div>
 
+          <CampoVideo
+            videoUrl={videoUrl}
+            handleFileSelect={handleFileSelect}
+            openVideo={openVideo}
+          />
 
-          <div>
-            <textarea
-
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white text-black"
-
-              placeholder="Url"
-              value={videoUrl || ''}
-              disabled
-            />
-          </div>
-          <div className="flex justify-content-start mt-6 space-x-16">
-            <input
-              type="file"
-              name="video"
-              accept="video/*"
-              className="hidden"
-              id="fileInput"
-              onChange={handleFileSelect}
-            />
-            <button
-              onClick={() => document.getElementById('fileInput').click()}
-              className="px-2 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md"
-            >
-              Seleccionador
-            </button>
-            <button
-              type="button"
-              onClick={openVideo}
-              className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md"
-            >
-              Abrir
-            </button>
-          </div>
           {/* Barra de Progreso */}
           {progress > 0 && progress < 100 && (
             <div className="mt-4 w-full bg-gray-200 rounded-lg">
