@@ -12,6 +12,7 @@ import InformacionEstudioForm from './AgregarInformacionEstudioForm';
 import InformacionEmpleado from './AgregarDatosFamiliaresForm';
 import ReportePersonalTable from './ReportePersonalTable';
 import MisReportesCamaras from './MisReportesCamaras';
+import MisReportesSerenazgo from './MisReportesSerenazgo';
 
 import { Carousel } from 'react-bootstrap';
 import '../css/dashContent.css';
@@ -110,7 +111,7 @@ const DashboardContent = ({ selectedContent }) => {
           
       case 'novedades-serenazgo':
         if (role === 'Administrador') {
-          return <div><h2>Novedades de Serenazgo</h2></div>; 
+          return <MisReportesSerenazgo/>; 
 
         } else {
           return <SerenoNoPermission />;

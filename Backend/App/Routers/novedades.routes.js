@@ -8,7 +8,7 @@ const { createNovedadesCamara, updateNovedadesCamara, deleteNovedadesCamara, get
 router.get('/novedades-camara', getNovedadesCamara);
 router.get('/novedades-camara/:idNovedades', getNovedadesCamaraById);
 router.post('/novedades-camara', upload.fields([{ name: 'video' }, { name: 'imagen' }]), createNovedadesCamara); // Asegúrate de que los nombres coincidan con los campos del formulario
-router.put('/novedades-camara/:idNovedades', updateNovedadesCamara);
+router.put('/novedades-camara/:idNovedades',upload.fields([{ name: 'video' }, { name: 'imagen' }]), updateNovedadesCamara);
 router.delete('/novedades-camara/:idNovedades', deleteNovedadesCamara);
 router.get('/localizacion/:ubiCamara', getLocalizacionPorUbiCamara);
 

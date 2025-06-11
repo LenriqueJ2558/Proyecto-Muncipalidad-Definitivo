@@ -253,8 +253,10 @@ const FormularioNovedades = () => {
         .then(response => {
           console.log('Respuesta del backend:', response.data);
           if (response.data.videoUrl) {
-            setProgress(100);  // Asegúrate de que el progreso sea 100 antes de mostrar el enlace
-            setVideoUrl(response.data.videoUrl);  // Guardar la URL del video subido
+            setProgress(100);
+            // Extraer solo la ruta relativa del video
+            const relativePath = response.data.videoUrl.replace('http://192.168.16.246:3003', '');
+            setVideoUrl(relativePath); // Ejemplo: /uploads/videosNovedades/archivo.mp4
           } else {
             console.error('No se recibió la URL del video.');
           }
@@ -270,45 +272,47 @@ const FormularioNovedades = () => {
 
   //VIDEOS
   const openVideo = () => {
-    if (videoUrl) {
-      const videoExtension = videoUrl.split('.').pop().toLowerCase();
-      const supportedFormats = ["mp4", "webm", "ogg"];
+  if (videoUrl) {
+    const fullUrl = `http://192.168.16.246:3003${videoUrl}`;  // reconstruye la URL completa
 
-      if (supportedFormats.includes(videoExtension)) {
-        const videoWindow = window.open(videoUrl, "_blank");
+    const videoExtension = fullUrl.split('.').pop().toLowerCase();
+    const supportedFormats = ["mp4", "webm", "ogg"];
 
-        if (videoWindow) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Video Abierto',
-            text: 'El video se ha abierto correctamente.',
-            confirmButtonColor: '#0e7c40',
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo abrir la pestaña del video.',
-            confirmButtonColor: '#d33',
-          });
-        }
+    if (supportedFormats.includes(videoExtension)) {
+      const videoWindow = window.open(fullUrl, "_blank");
+
+      if (videoWindow) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Video Abierto',
+          text: 'El video se ha abierto correctamente.',
+          confirmButtonColor: '#0e7c40',
+        });
       } else {
         Swal.fire({
-          icon: 'warning',
-          title: 'Formato no compatible',
-          text: `El formato de video ${videoExtension.toUpperCase()} no es compatible con Google Chrome.`,
-          confirmButtonColor: '#f39c12',
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo abrir la pestaña del video.',
+          confirmButtonColor: '#d33',
         });
       }
     } else {
       Swal.fire({
-        icon: 'info',
-        title: 'Sin video',
-        text: 'No hay video seleccionado.',
-        confirmButtonColor: '#3498db',
+        icon: 'warning',
+        title: 'Formato no compatible',
+        text: `El formato de video ${videoExtension.toUpperCase()} no es compatible con Google Chrome.`,
+        confirmButtonColor: '#f39c12',
       });
     }
-  };
+  } else {
+    Swal.fire({
+      icon: 'info',
+      title: 'Sin video',
+      text: 'No hay video seleccionado.',
+      confirmButtonColor: '#3498db',
+    });
+  }
+};
 
   const clearForm = () => {
     reset({

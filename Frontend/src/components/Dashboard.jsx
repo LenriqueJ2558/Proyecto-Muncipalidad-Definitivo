@@ -9,6 +9,8 @@ import buoImage from '../image/buo.png';
 import Camaras from '../image/camaras.png';
 import ActualizarNovedades from './ActualizarNovedades';
 
+import ActualizarSerenazgoNovedades from './ActualizarSerenazgoNovedades';
+
 const WelcomeModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
@@ -214,6 +216,7 @@ const Dashboard = () => {
           <Routes>
             <Route path="/" element={<DashboardContent selectedContent={selectedContent} />} />
             <Route path="novedades/:id" element={<ActualizarNovedades />} />
+            <Route path="novedadesSerenazgo/:id" element={<ActualizarSerenazgoNovedades />} />
           </Routes>
         </main>
       </div>

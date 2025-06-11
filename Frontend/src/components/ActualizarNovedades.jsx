@@ -29,12 +29,15 @@ const ActualizarNovedades = () => {
     } = useForm();
 
     const [loading, setLoading] = useState(false);
+    const [idNovedadesBack, setIdNovedadesBack] = useState(null);
     const [supervisores, setSupervisores] = useState([]);
     const [operadores, setOperadores] = useState([]);
     const [previewFoto, setPreviewFoto] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState('');
     const [videoFile, setVideoFile] = useState(null);
     const [previewVideoUrl, setPreviewVideoUrl] = useState(null);
+    const [videoUrlFinal, setVideoUrlFinal] = useState('');
+    const [videoUrl, setVideoUrl] = useState('');
     const [locationData, setLocationData] = useState({
         longitud: '',
         latitud: '',
@@ -84,13 +87,12 @@ const ActualizarNovedades = () => {
                 const data = response.data;
 
                 if (data) {
-                    setValue('idNovedades', data._id || '');
+                    setIdNovedadesBack(data.idNovedades);
 
                     setValue('GeneralDeNovedades', data.GeneralDeNovedades || '');
                     setValue('TipoDeNovedades', data.TipoDeNovedades || '');
                     setValue('SubTipoNovedades', data.SubTipoNovedades || '');
-                    setValue('NombreSupervisor', data.NombreSupervisor || '');
-                    setValue('NombreOperador', data.NombreOperador || '');
+
                     setValue('Turno', data.Turno || '');
                     setValue('NumeroDeEstacion', data.NumeroDeEstacion || '');
                     setValue('DescripciondeNovedad', data.DescripciondeNovedad || '');
@@ -109,7 +111,9 @@ const ActualizarNovedades = () => {
 
 
                     setPreviewFoto(data.Foto ? `http://192.168.16.246:3003/api${data.Foto}` : null);
+                    setVideoUrlFinal(data.UrlVideo || null);
                     setPreviewVideoUrl(data.UrlVideo || null);
+                    setVideoUrl(data.UrlVideo || '');
                 } else {
                     Swal.fire('No se encontró la novedad', '', 'warning');
                 }
@@ -121,6 +125,7 @@ const ActualizarNovedades = () => {
 
         fetchData();
     }, [id, setValue]);
+
     useEffect(() => {
         const fetchSupervisores = async () => {
             try {
@@ -134,6 +139,7 @@ const ActualizarNovedades = () => {
                 console.error('Error fetching supervisors:', error);
             }
         };
+
 
 
 
@@ -153,6 +159,38 @@ const ActualizarNovedades = () => {
         fetchSupervisores();
         fetchOperadores();
     }, []);
+    useEffect(() => {
+        if (
+            supervisores.length > 0 &&
+            operadores.length > 0 &&
+            idNovedadesBack // esto se carga cuando fetchData termina
+        ) {
+            const fetchDataAgain = async () => {
+                try {
+                    const response = await axios.get(`http://192.168.16.246:3003/api/novedades-camara/${id}`);
+                    const data = response.data;
+
+                    const supervisorMatch = supervisores.find(
+                        (s) =>
+                            s.empleado.NombreCompleto.trim().toLowerCase() ===
+                            data.NombreSupervisor?.trim().toLowerCase()
+                    );
+                    const operadorMatch = operadores.find(
+                        (o) =>
+                            o.empleado.NombreCompleto.trim().toLowerCase() ===
+                            data.NombreOperador?.trim().toLowerCase()
+                    );
+
+                    setValue('NombreSupervisor', supervisorMatch?.empleado.NombreCompleto || '');
+                    setValue('NombreOperador', operadorMatch?.empleado.NombreCompleto || '');
+                } catch (error) {
+                    console.error('Error al actualizar nombres desde datos:', error);
+                }
+            };
+
+            fetchDataAgain();
+        }
+    }, [supervisores, operadores, idNovedadesBack, id, setValue]);
 
     const handleSearch1 = async () => {
         const codigoBusqueda = getValues('CodigoBusqueda1');
@@ -199,28 +237,34 @@ const ActualizarNovedades = () => {
 
         try {
             const formData = new FormData();
-            formData.append('NombreSupervisor', data.NombreSupervisor);
-            formData.append('NombreOperador', data.NombreOperador);
-            formData.append('Turno', data.Turno);
-            formData.append('GeneralDeNovedades', data.GeneralDeNovedades);
-            formData.append('TipoDeNovedades', data.TipoDeNovedades);
-            formData.append('SubTipoNovedades', data.SubTipoNovedades);
-            formData.append('NumeroDeEstacion', data.NumeroDeEstacion);
-            formData.append('DescripciondeNovedad', data.DescripciondeNovedad);
-            formData.append('ubicacion_novedades', data.ubicacion_novedades);
-            formData.append('Estado', data.Estado);
-            formData.append('UbiCamara', data.UbiCamara);
+            formData.append('NombreSupervisor', data.NombreSupervisor || '');
+            formData.append('NombreOperador', data.NombreOperador || '');
+            formData.append('Turno', data.Turno || '');
 
-            if (videoFile) formData.append('video', videoFile);
+            formData.append('GeneralDeNovedades', data.GeneralDeNovedades || '');
+            formData.append('TipoDeNovedades', data.TipoDeNovedades || '');
+            formData.append('SubTipoNovedades', data.SubTipoNovedades || '');
+            formData.append('NumeroDeEstacion', data.NumeroDeEstacion || '');
+            formData.append('DescripciondeNovedad', data.DescripciondeNovedad || '');
+            formData.append('ubicacion_novedades', data.ubicacion_novedades || '');
+            formData.append('Estado', data.Estado || '');
+            formData.append('UbiCamara', data.UbiCamara || '');
+            formData.append('Lat', data.Lat || '');
+            formData.append('Longitud', data.Longitud || '');
+            formData.append('Localizacion', data.Localizacion || '');
+            formData.set('UrlVideo', String(videoUrlFinal || videoUrl || ''));
+
             if (previewFoto instanceof File) formData.append('imagen', previewFoto);
 
             await axios.put(
-                `http://192.168.16.246:3003/api/novedades-camara/${id}`,
+                `http://192.168.16.246:3003/api/novedades-camara/${idNovedadesBack}`,
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } }
             );
 
+
             Swal.fire('Éxito', 'Novedad actualizada correctamente', 'success');
+            console.log('ID que se va a enviar al backend:', idNovedadesBack);
         } catch (error) {
             console.error(error);
             Swal.fire('Error', 'No se pudo actualizar la novedad', 'error');
@@ -238,15 +282,40 @@ const ActualizarNovedades = () => {
         setPreviewFoto(file);
     };
 
-    const handleVideoChange = (e) => {
-        const file = e.target.files[0];
-        if (file && !file.type.startsWith('video/')) {
-            Swal.fire('Archivo inválido', 'Selecciona un video válido', 'error');
-            return;
-        }
-        setVideoFile(file);
-    };
+    const handleVideoChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !file.type.startsWith('video/')) {
+        Swal.fire('Archivo inválido', 'Selecciona un video válido', 'error');
+        return;
+    }
 
+    setLoading(true);
+    try {
+        const formData = new FormData();
+        formData.append('video', file);
+
+        const response = await axios.post('http://192.168.16.246:3003/api/upload/video', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        if (response.data && response.data.videoUrl) {
+            const fullUrl = response.data.videoUrl;
+            const relativeUrl = new URL(fullUrl).pathname;
+
+            setVideoFile(null); // limpiamos el archivo porque ahora mostramos el video remoto
+            setVideoUrlFinal(relativeUrl);  // guarda solo la ruta relativa
+            setPreviewVideoUrl(fullUrl); // usamos la URL completa para previsualizar el video
+            Swal.fire('Video cargado y convertido correctamente', '', 'success');
+        } else {
+            throw new Error('No se recibió URL del video convertido');
+        }
+    } catch (error) {
+        console.error('Error al subir o convertir video:', error);
+        Swal.fire('Error al procesar el video', '', 'error');
+    } finally {
+        setLoading(false);
+    }
+};
     return (
         <div className="centrar-contenido">
             <div className="center-content">
@@ -299,7 +368,7 @@ const ActualizarNovedades = () => {
 
                         <label>Ubicación de Novedades:</label>
                         <input {...register('ubicacion_novedades')} className="ubicacion-novedad" />
-                        
+
                         <SelectEstado register={register} errors={errors} />
 
                         <SelectUbicacionCamara
@@ -310,7 +379,7 @@ const ActualizarNovedades = () => {
                         <CamposGeolocalizacion locationData={locationData} register={register} />
 
                         <label>Foto (opcional):</label>
-                        <input type="file" accept="image/*" onChange={handleFotoChange} className="mb-2" id='file-image-input'/>
+                        <input type="file" accept="image/*" onChange={handleFotoChange} className="mb-2" id='file-image-input' />
                         {previewFoto && (
                             <img
                                 src={previewFoto instanceof File ? URL.createObjectURL(previewFoto) : previewFoto}
@@ -318,15 +387,47 @@ const ActualizarNovedades = () => {
                                 className="mb-4 w-55"
                             />
                         )}
+                        <label className="block mb-2">URL del Video Convertido:</label>
+                        <div className="flex items-center gap-2 mb-4">
+                            <input
+                                type="text"
+                                value={videoUrlFinal}
+                                onChange={(e) => setVideoUrlFinal(e.target.value)}
+                                className="w-full border px-2 py-1 rounded"
+                            />
+                            {videoUrlFinal && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const fullUrl = videoUrlFinal.startsWith('http')
+                                            ? videoUrlFinal
+                                            : `http://192.168.16.246:3003${videoUrlFinal}`;
+                                        window.open(fullUrl, '_blank');
+                                    }}
+                                    className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                                >
+                                    Abrir
+                                </button>
+                            )}
+                        </div>
 
-                        <label>Video (opcional):</label>
-                        <input type="file" accept="video/*" onChange={handleVideoChange} className="mb-2" id='file-video-input'/>
-                        {previewVideoUrl && !videoFile && (
-                            <video controls className="mb-4 w-full max-w-md">
-                                <source src={previewVideoUrl} type="video/mp4" />
-                                Tu navegador no soporta la reproducción de videos.
-                            </video>
-                        )}
+                        <label className="block mb-2">Video (opcional):</label>
+                        <div className="mb-4">
+                            <input
+                                type="file"
+                                accept="video/*"
+                                onChange={handleVideoChange}
+                                id="file-video-input"
+                                className="hidden"
+                            />
+                            <label
+                                htmlFor="file-video-input"
+                                className="bg-red-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-red-700 inline-block"
+                            >
+                                Seleccionar Video
+                            </label>
+                        </div>
+
 
                         <button
                             type="submit"

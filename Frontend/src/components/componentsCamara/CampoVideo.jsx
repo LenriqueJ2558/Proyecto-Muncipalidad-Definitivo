@@ -1,6 +1,14 @@
 import React from 'react';
 
-const CampoVideo = ({ videoUrl, handleFileSelect, openVideo }) => {
+const CampoVideo = ({ videoUrl, handleFileSelect }) => {
+  const fullVideoUrl = videoUrl ? `http://192.168.16.246:3003${videoUrl}` : '';
+
+  const openVideo = () => {
+    if (fullVideoUrl) {
+      window.open(fullVideoUrl, '_blank');
+    }
+  };
+
   return (
     <div>
       <div>
@@ -33,6 +41,7 @@ const CampoVideo = ({ videoUrl, handleFileSelect, openVideo }) => {
           type="button"
           onClick={openVideo}
           className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md"
+          disabled={!videoUrl}
         >
           Abrir
         </button>

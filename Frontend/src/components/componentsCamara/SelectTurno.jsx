@@ -6,9 +6,9 @@ const SelectTurno = ({ register, errors }) => (
         className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white text-black"
       >
         <option value="">Seleccione un Turno</option>
-        <option value="Día">Día</option>
-        <option value="Tarde">Tarde</option>
-        <option value="Noche">Noche</option>
+        <option value="DÍA">DÍA</option>
+        <option value="TARDE">TARDE</option>
+        <option value="NOCHE">NOCHE</option>
       </select>
       {errors.Turno && (
         <p className="text-red-500 text-sm mt-2">{errors.Turno.message}</p>
